@@ -17,7 +17,7 @@ pnpm build
 pnpm start
 ```
 
-Development uses `.next-dev`; production builds and `start` use `.next-build`, so a build does not overwrite a running development server. `NEXT_DIST_DIR` can override either location.
+Development uses `.next-dev`; production builds and `start` use the default `.next` (which Vercel expects), so a build does not overwrite a running development server. `NEXT_DIST_DIR` can override either location.
 
 ## Structure
 
