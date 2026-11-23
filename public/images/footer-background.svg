@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="184" viewBox="0 0 1440 184" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="warm-left" cx="0" cy="0" r="1" gradientTransform="matrix(520 -120 70 290 70 190)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c4a51a" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#c4a51a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="warm-center" cx="0" cy="0" r="1" gradientTransform="matrix(310 0 0 145 945 192)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#baa013" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#baa013" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shade" x1="1180" y1="0" x2="1280" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0e1010"/>
+      <stop offset="1" stop-color="#111314"/>
+    </linearGradient>
+  </defs>
+  <path fill="#0e1010" d="M0 0h1440v184H0z"/>
+  <path fill="url(#warm-left)" d="M0 0h1440v184H0z"/>
+  <path fill="#000" fill-opacity=".13" d="M0 0h360L0 174z"/>
+  <path fill="url(#warm-center)" d="M0 0h1440v184H0z"/>
+  <path fill="url(#shade)" d="M1255 0h185v184H965z"/>
+</svg>

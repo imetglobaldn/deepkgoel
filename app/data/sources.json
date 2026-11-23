@@ -1,0 +1,61 @@
+{
+  "verifiedOn": "2026-11-18",
+  "content": [
+    {
+      "scope": "Biography, career, education, original milestones",
+      "source": "https://deepakgoel.in/about-deepak-goel/",
+      "note": "Original website content retained. 18+, 34K+ and geographic milestones are archival profile figures, not fresh analytics."
+    },
+    {
+      "scope": "Expertise and training",
+      "source": "https://deepakgoel.in/area-of-expertise-deepak-goel/"
+    },
+    {
+      "scope": "Writing",
+      "source": "https://deepakgoel.in/speaking-mind/",
+      "note": "Six complete articles reused from the sourced article archive; original publication dates retained."
+    },
+    {
+      "scope": "Six original daily quotes",
+      "source": "https://deepakgoel.in/daily-thumbs-up/",
+      "note": "Existing transcription of the six published quote graphics."
+    },
+    {
+      "scope": "Sunday quote",
+      "source": "https://www.linkedin.com/pulse/12-board-results-out-didnt-score-90-follow-8-points-deepak-goel",
+      "published": "2018-05-30",
+      "note": "Eight-word excerpt from Deepak's authored article. The original hashtag on upskilling is rendered as plain text."
+    },
+    {
+      "scope": "BRICS+ event photographs",
+      "source": "https://www.linkedin.com/posts/digitallynext_brics-newdelhi-dubai-activity-7504249188776542208-N2lH",
+      "eventDate": "2026-09-10",
+      "publishedUTC": "2026-09-11",
+      "note": "Attendance verified from original gallery. Date and venue visible in event sign. No speaking-role claim."
+    },
+    {
+      "scope": "India–Japan dialogue video cover",
+      "source": "https://www.linkedin.com/posts/deegoel_brics-japan-partnerinprogress-activity-7508820026137837568-NKae",
+      "published": "2026-09-24",
+      "note": "Exact event day unverified. Displayed as Shared 24 September 2026; clearly identified as an original video cover."
+    },
+    {
+      "scope": "Archived talks and press clippings",
+      "source": "https://deepakgoel.in/walk-talk/"
+    }
+  ],
+  "design": {
+    "file": "https://www.figma.com/design/IGnduQLB6VMXw4kzcj2oPz",
+    "homeDesktop": "140:679",
+    "homeMobile": "140:938",
+    "portrait": "User-approved generated hero cutout from Figma; event photographs are authentic source images.",
+    "groupMarks": "IIMs and IITs use the user-approved custom group symbols, not campus logos."
+  },
+  "behavior": {
+    "rotation": "Monday to Sunday in visitor local time, seven quotes repeated weekly",
+    "automaticOpen": "Once per day per browser tab session, 1.2 seconds after initialization",
+    "collapse": "6 seconds; pauses on hover/focus, can be kept open; icon reopens panel",
+    "dataFlow": "Curated local content. No live social scraping. Enquiries are drafts opened in the visitor's email or WhatsApp app."
+  },
+  "researchLimits": "Recent Instagram posts were unavailable, Facebook throttled, and X restricted. Official profile links verified through the source website. Public LinkedIn posts supplied the recent additions."
+}

@@ -1,24 +1,30 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter, Outfit, Space_Grotesk } from "next/font/google";
+import { Header, Motion, PageEnd } from "./components/Chrome";
+import DailyThumbsUp from "./components/DailyThumbsUp";
+import { SITE_NAME, SITE_URL, SOCIAL_IMAGE } from "./data/site";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
-
-const manrope = Manrope({
-  variable: "--font-display",
+const heading = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-heading",
   display: "swap",
-  weight: ["500", "600", "700", "800"],
+});
+const logo = Outfit({
+  subsets: ["latin"],
+  weight: "600",
+  variable: "--font-logo",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://deepakgoel.in"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Deepak Goel - Entrepreneur · Group CEO · Speaker",
     template: "%s · Deepak Goel",
@@ -36,19 +42,20 @@ export const metadata: Metadata = {
     "iSoCIAL",
   ],
   openGraph: {
+    siteName: SITE_NAME,
     title: "Deepak Goel - Entrepreneur · Group CEO · Speaker",
     description:
       "New-gen Indian entrepreneur building a better Digital-Social Media enabled world.",
     type: "website",
-    url: "https://deepakgoel.in",
-    images: ["/banner.png"],
+    url: SITE_URL,
+    images: [SOCIAL_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Deepak Goel - Entrepreneur · Group CEO · Speaker",
     description:
       "New-gen Indian entrepreneur building a better Digital-Social Media enabled world.",
-    images: ["/banner.png"],
+    images: [SOCIAL_IMAGE],
   },
 };
 
@@ -58,12 +65,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${manrope.variable} antialiased`}
+      className={`${inter.variable} ${heading.variable} ${logo.variable}`}
     >
-      <body className="min-h-screen bg-ink text-ivory selection:bg-saffron selection:text-ink">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+      <body>
+        <div className="site">
+          <a className="site-skip" href="#site-content">
+            Skip to content
+          </a>
+          <Header />
+          <main id="site-content">{children}</main>
+          <PageEnd />
+          <DailyThumbsUp />
+          <Motion />
+        </div>
       </body>
     </html>
   );
