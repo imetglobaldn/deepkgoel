@@ -50,7 +50,7 @@ export default function AboutPage() {
             </p>
             <p>
               From India to the US, Canada and Europe, that experience has
-              shaped one belief: progress starts with a clear perspective-and
+              shaped one belief: progress starts with a clear perspective, and
               becomes real through people.
             </p>
             <p>

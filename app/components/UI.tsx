@@ -1,14 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen, Compass, TrendingUp } from "lucide-react";
 import { ViewTransition, type CSSProperties, type ReactNode } from "react";
 import StatisticsCounters from "./StatisticsCounters";
+import VentureCards from "./VentureCards";
 import {
   expertise,
   impact,
-  navigation,
   socialLinks,
-  ventures,
   type Article,
   type IntroImage,
 } from "../data/content";
@@ -176,7 +175,7 @@ export function Footer() {
       path: "M15.36 24V13.05h3.68l.55-4.27h-4.23V6.05c0-1.24.35-2.08 2.12-2.08h2.26V.15A30.4 30.4 0 0 0 16.45 0c-3.26 0-5.49 1.99-5.49 5.64v3.14H7.28v4.27h3.68V24z",
     },
     {
-      label: "Twitter",
+      label: "X",
       href: socialLinks.find((link) => link.label === "X")?.href,
       path: "M23.954 4.57a10 10 0 0 1-2.825.775 4.958 4.958 0 0 0 2.163-2.723 9.99 9.99 0 0 1-3.127 1.195 4.916 4.916 0 0 0-8.384 4.482A13.944 13.944 0 0 1 1.64 3.162a4.916 4.916 0 0 0 1.523 6.574A4.903 4.903 0 0 1 .936 9.12v.062a4.918 4.918 0 0 0 3.946 4.818 4.935 4.935 0 0 1-2.224.084 4.923 4.923 0 0 0 4.6 3.419 9.868 9.868 0 0 1-6.102 2.105c-.396 0-.788-.023-1.175-.068a13.933 13.933 0 0 0 7.548 2.212c9.057 0 14.01-7.503 14.01-14.01 0-.213-.005-.425-.014-.637a10.012 10.012 0 0 0 2.46-2.548z",
     },
@@ -199,20 +198,7 @@ export function Footer() {
             <Logo />
             <p>Writer · Strategist · Media Professional</p>
           </div>
-          <nav
-            className="site-footer-navigation"
-            aria-label="Footer navigation"
-          >
-            {[...navigation, { label: "Contact", href: "/book-your-time" }].map(
-              (item) => (
-                <Link key={item.href} href={item.href}>
-                  {item.label}
-                </Link>
-              ),
-            )}
-          </nav>
           <div className="site-footer-socials" aria-label="Social profiles">
-            <span className="site-footer-social-label">Social networks</span>
             <div className="site-footer-social-icons">
               {footerSocials
                 .filter((item) => item.href)
@@ -237,10 +223,6 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="site-footer-bottom">
-          <p>© {new Date().getFullYear()} Deepak Goel. All rights reserved.</p>
-          {/* Privacy and Terms links go here once approved pages exist. */}
-        </div>
       </div>
     </footer>
   );
@@ -252,41 +234,88 @@ export function Statistics() {
     </Surface>
   );
 }
-/** Pass `eager` where the portrait sits at the top of the page, as on About. */
+/** The seated portrait from the original site: the photo sits in front of an
+    offset yellow frame, and his legs and shoes step out over both edges.
+    The frame is drawn by the stylesheet, so its colour follows the brand.
+    Pass `eager` where the portrait sits at the top of the page, as on About. */
 export function Portrait({ eager = false }: { eager?: boolean }) {
   return (
     <div className="site-portrait" data-reveal="zoom">
+      <span className="site-portrait-frame" aria-hidden="true" />
       <Image
-        src="/images/portrait.webp"
-        width={762}
-        height={762}
-        sizes="(max-width: 760px) 500px, 36vw"
-        alt="Deepak Goel seated in his office"
+        src="/images/portrait-seated.webp"
+        width={1172}
+        height={1552}
+        sizes="(max-width: 760px) 90vw, 36vw"
+        alt="Deepak Goel seated in an office chair, in a Digitally Next polo shirt"
         loading={eager ? "eager" : undefined}
       />
     </div>
   );
 }
-export function ExpertiseCards({
-  impactCards = false,
-}: {
-  impactCards?: boolean;
-}) {
+export function ExpertiseCards() {
+  const pathways = [
+    { icon: Compass, action: "Shape your brand" },
+    { icon: TrendingUp, action: "Build your growth strategy" },
+    { icon: BookOpen, action: "Put learning into practice" },
+  ];
   return (
-    <div className="site-grid-three">
-      {(impactCards ? impact : expertise).map((item, index) => (
-        <article className="site-glass site-card" data-reveal key={item.title}>
-          <span className="site-number">0{index + 1}</span>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
-          {!impactCards && (
-            <Button href={`/expertise#capability-${index + 1}`} dark>
-              Explore the expertise
-            </Button>
-          )}
-        </article>
-      ))}
+    <div className="site-expertise-grid">
+      {expertise.map((item, index) => {
+        const { icon: Icon, action } = pathways[index];
+        return (
+          <article data-reveal key={item.title}>
+            <Link
+              className="site-glass site-expertise-card"
+              href={`/expertise#capability-${index + 1}`}
+              aria-labelledby={`expertise-title-${index}`}
+            >
+              <div className="site-expertise-card-top" aria-hidden="true">
+                <span className="site-section-index">0{index + 1}</span>
+                <span className="site-expertise-icon">
+                  <Icon size={30} strokeWidth={1.5} />
+                </span>
+              </div>
+              <div className="site-expertise-copy">
+                <h3 id={`expertise-title-${index}`}>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              <div className="site-expertise-link" aria-hidden="true">
+                <span>{action}</span>
+                <span className="site-expertise-arrow">
+                  <Arrow />
+                </span>
+              </div>
+            </Link>
+          </article>
+        );
+      })}
     </div>
+  );
+}
+export function ImpactCards() {
+  return (
+    <ol className="site-impact-grid">
+      {impact.map((item, index) => (
+        <li className="site-glass site-impact-card" data-reveal key={item.title}>
+          <div className="site-impact-photo">
+            <Image
+              src={item.image}
+              alt={item.imageAlt}
+              fill
+              sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1600px) 30vw, 480px"
+            />
+          </div>
+          <div className="site-impact-copy">
+            <span className="site-section-index" aria-hidden="true">
+              0{index + 1}
+            </span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 export function Ventures() {
@@ -297,26 +326,7 @@ export function Ventures() {
         <br />
         ONE BUILDER.
       </h2>
-      <div className="site-ventures">
-        {ventures.map((venture, i) => (
-          <a
-            className="site-glass site-venture"
-            key={venture.title}
-            href={venture.href}
-            target="_blank"
-            rel="noreferrer"
-            data-reveal
-          >
-            <span className="site-index">0{i + 1}</span>
-            <h3>{venture.title}</h3>
-            <div>
-              <span className="site-caption">{venture.category}</span>
-              <p>{venture.description}</p>
-            </div>
-            <Arrow />
-          </a>
-        ))}
-      </div>
+      <VentureCards />
     </Surface>
   );
 }

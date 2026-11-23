@@ -29,7 +29,7 @@ export default function MediaPage() {
         <div className="site-section-head">
           <h2 data-reveal>RECENT CONVERSATIONS.</h2>
           <p data-reveal>
-            Verified event photographs and updates, alongside moments from the
+            Recent events and updates, alongside moments from the
             archive.
           </p>
         </div>

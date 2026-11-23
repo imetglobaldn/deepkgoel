@@ -63,16 +63,22 @@ export const expertise = [
 export const impact = [
   {
     title: "Mentoring future leaders",
+    image: "/images/impact/mentoring.webp",
+    imageAlt: "Deepak Goel interacting with students at a LEAD career meet in 2011",
     description:
       "Mentoring and guest sessions across B-schools, engineering colleges and professional associations, including IIMs, ISB, IIFT, IITs and BIT.",
   },
   {
     title: "Driving digital transformation",
+    image: "/images/impact/digital-transformation.webp",
+    imageAlt: "Deepak Goel presenting a Digitally Next digital-media session at SMBConnect",
     description:
       "Through Digitally Next: digital branding, demand generation and personal branding for startups, professionals and corporations.",
   },
   {
     title: "Building professional education",
+    image: "/images/impact/professional-education.webp",
+    imageAlt: "Deepak Goel teaching participants in an iMET Global master class",
     description:
       "Through iMET Global: practical, business-driven upskilling for professionals, MSMEs and startups across India.",
   },
@@ -195,9 +201,9 @@ export const introImages = {
     start: "52%",
   },
   contact: {
-    src: "/images/intro/lounge.webp",
-    position: "100% 45%",
-    opacity: 0.6,
+    src: "/images/intro/conversation.webp",
+    position: "100% 62%",
+    opacity: 0.78,
   },
 } satisfies Record<string, IntroImage>;
 
@@ -208,6 +214,7 @@ export const ventures = [
     description:
       "Digital branding, demand generation and personal branding for ambitious businesses and leaders.",
     href: "https://digitallynext.com/",
+    preview: "/images/ventures/digitally-next.webp",
   },
   {
     title: "iMET Global",
@@ -215,6 +222,7 @@ export const ventures = [
     description:
       "Industry-led education and practical upskilling for professionals, startups and growing businesses.",
     href: "https://imetglobal.com/",
+    preview: "/images/ventures/imet-global.webp",
   },
   {
     title: "iSoCIAL",
@@ -222,6 +230,7 @@ export const ventures = [
     description:
       "Connecting people, ideas and opportunities across the Internet of Things and Big Data community.",
     href: "https://isocialconnect.com/",
+    preview: null,
   },
 ];
 export const capabilities = [

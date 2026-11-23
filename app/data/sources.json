@@ -50,7 +50,84 @@
     "homeMobile": "140:938",
     "portrait": "User-approved generated hero cutout from Figma; event photographs are authentic source images.",
     "groupMarks": "IIMs and IITs use the user-approved custom group symbols, not campus logos.",
-    "introBackdrops": "Faint pictures behind the heading of each inner page (public/images/intro). About uses the authentic workshop photograph. Media uses a soft-edged crop of the authentic AIMA talk photograph (speaker.webp): the lectern sign and wall lettering are faded out and nothing is added. Expertise (chess.webp), Writing and the article pages (library.webp), Daily Thumbs Up (morning.webp, mirrored) and Contact plus the not-found page (lounge.webp) are generated decorative scenes, not photographs of real places or events."
+    "introBackdrops": "Faint pictures behind the heading of each inner page (public/images/intro). About uses the authentic workshop photograph. Media uses a soft-edged crop of the authentic AIMA talk photograph (speaker.webp): the lectern sign and wall lettering are faded out and nothing is added. Expertise (chess.webp), Writing and the article pages (library.webp), Daily Thumbs Up (morning.webp, mirrored) and Contact plus the not-found page (conversation.webp) are generated decorative scenes, not photographs of real places or events."
+  },
+  "venturePreviews": {
+    "capturedOn": "2026-11-23",
+    "images": [
+      {
+        "file": "/images/ventures/digitally-next.webp",
+        "source": "https://www.digitallynext.com/",
+        "type": "Actual homepage screenshot, not generated"
+      },
+      {
+        "file": "/images/ventures/imet-global.webp",
+        "source": "https://www.imetglobal.com/",
+        "type": "Actual homepage screenshot, not generated"
+      }
+    ],
+    "isocial": "No preview, per Karan. isocialconnect.com and www.isocialconnect.com did not resolve during capture.",
+    "brandColors": {
+      "digitallyNext": {
+        "source": "https://www.digitallynext.com/",
+        "sourceColor": "#e53935",
+        "darkBackgroundText": "#ff625c"
+      },
+      "imetGlobal": {
+        "source": "https://www.imetglobal.com/",
+        "sourceColor": "#06b5c5",
+        "darkBackgroundText": "#06b5c5"
+      },
+      "isocial": {
+        "source": "https://in.linkedin.com/company/isocial-connect",
+        "sourceColor": "#e94603",
+        "darkBackgroundText": "#ff7b35",
+        "note": "Orange sampled from the official company cover image, not a published brand guide."
+      }
+    },
+    "colorNote": "Red and orange use brighter shades in the small hero credit for readability on its dark background."
+  },
+  "figmaImpactDraftPhotos": {
+    "verifiedOn": "2026-11-23",
+    "scope": "Approved People in focus design, implemented on the homepage and synced to desktop and phone Figma frames.",
+    "images": [
+      {
+        "theme": "Mentoring future leaders",
+        "source": "https://censud.wordpress.com/tag/professional-personality/",
+        "asset": "https://censud.wordpress.com/wp-content/uploads/2011/10/lead-abhilashi10.jpg",
+        "localReference": "temp/figma-impact-photos/mentoring-lead.jpg",
+        "note": "Authentic archival photograph of Deepak interacting with students during the 2011 LEAD career meets, identified by the organizer's caption. Not a new event.",
+        "publishedAsset": "/images/impact/mentoring.webp"
+      },
+      {
+        "theme": "Driving digital transformation",
+        "source": "https://www.linkedin.com/posts/deegoel_fantastic-conclusion-by-smbconnect-activity-7152998978358292480-MlyH",
+        "corroboratingSource": "https://www.linkedin.com/posts/deegoel_therise-msmeindia-digitalbranding-activity-7146417745163710464-Pj80",
+        "localReference": "temp/figma-impact-photos/digital-smb.jpg",
+        "note": "Real event still shared by Deepak, showing the Digitally Next digital/social-media session at SMBConnect. The original contains video UI; the Figma crop focuses on the presenter and branding. No pixels generated.",
+        "publishedAsset": "/images/impact/digital-transformation.webp",
+        "crop": {
+          "left": 25,
+          "top": 20,
+          "width": 562,
+          "height": 330
+        }
+      },
+      {
+        "theme": "Building professional education",
+        "source": "https://www.imetglobal.com/",
+        "asset": "https://www.imetglobal.com/cohorts/Cohort%2005.webp",
+        "localReference": "temp/figma-impact-photos/imet-cohort-05.jpg",
+        "note": "Official iMET Global master-class image used in Cohort 05. Event date unspecified. Converted to JPEG for Figma compatibility; source padding cropped in Figma.",
+        "publishedAsset": "/images/impact/professional-education.webp",
+        "crop": {
+          "left": 320,
+          "top": 144,
+          "width": 3360,
+          "height": 1971
+        }
+      }
+    ]
   },
   "behavior": {
     "rotation": "Monday to Sunday in visitor local time, seven quotes repeated weekly",
@@ -58,5 +135,36 @@
     "collapse": "6 seconds; pauses on hover/focus, can be kept open; icon reopens panel",
     "dataFlow": "Curated local content. No live social scraping. Enquiries are drafts opened in the visitor's email or WhatsApp app."
   },
-  "researchLimits": "Recent Instagram posts were unavailable, Facebook throttled, and X restricted. Official profile links verified through the source website. Public LinkedIn posts supplied the recent additions."
+  "researchLimits": "Recent Instagram posts were unavailable, Facebook throttled, and X restricted. Official profile links verified through the source website. Public LinkedIn posts supplied the recent additions.",
+  "figmaExpertiseDraftPhotos": {
+    "verifiedOn": "2026-11-23",
+    "scope": "Figma-only expertise drafts on page 343:4563; not used in website code.",
+    "images": [
+      {
+        "draft": "01 / Perspective in practice",
+        "source": "https://www.imetglobal.com/gallery/",
+        "asset": "https://www.imetglobal.com/gallery/2.webp",
+        "localReference": "temp/figma-impact-photos/imet-gallery-2.jpg"
+      },
+      {
+        "draft": "02 / Field notes",
+        "source": "https://www.linkedin.com/posts/deegoel_therise-msmeindia-digitalbranding-activity-7146417745163710464-Pj80",
+        "asset": "https://media.licdn.com/dms/image/v2/D4D22AQG__4ViFnqfQA/feedshare-shrink_800/feedshare-shrink_800/0/1703838762118?e=2147483647&v=beta&t=gmLXEeWhZguAR0mKla5X2rMUao_EKTaJW1NpofUJgXc",
+        "localReference": "temp/figma-impact-photos/digital-event-4.jpg"
+      },
+      {
+        "draft": "02 / Field notes",
+        "source": "https://www.linkedin.com/posts/deegoel_therise-msmeindia-digitalbranding-activity-7146417745163710464-Pj80",
+        "asset": "https://media.licdn.com/dms/image/v2/D4D22AQGYAeW1mJoJag/feedshare-shrink_800/feedshare-shrink_800/0/1703838749310?e=2147483647&v=beta&t=pZqSaPcgyR3tLyxPQuIw4jhzqi5k_-8q5cQIY8UFxl4",
+        "localReference": "temp/figma-impact-photos/digital-event-2.jpg"
+      },
+      {
+        "draft": "02 / Field notes",
+        "source": "https://www.imetglobal.com/gallery/",
+        "asset": "https://www.imetglobal.com/gallery/1.webp",
+        "localReference": "temp/figma-impact-photos/imet-gallery-1.jpg"
+      }
+    ],
+    "note": "Distinct archival photographs, with no event dates invented and no overlap with the approved People in focus images."
+  }
 }

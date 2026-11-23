@@ -23,7 +23,7 @@ export default function QuoteCollection() {
   return (
     <>
       <p className="site-section-description" data-reveal>
-        One thought for each day. The same seven return every week-a small
+        One thought for each day. The same seven return every week: a small
         reminder to carry with you.
       </p>
       <div className="site-quotes-grid">

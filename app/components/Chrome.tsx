@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { navigation } from "../data/content";
@@ -88,7 +89,7 @@ export function Header() {
   return (
     <header
       ref={header}
-      className={`site-header${pathname === "/" ? " site-header--hero" : ""}${scrollState.pathname === pathname && scrollState.scrolled ? " is-scrolled" : ""}${scrollState.pathname === pathname && scrollState.hidden && !open ? " is-hidden" : ""}`}
+      className={`site-header${pathname === "/" ? " site-header--hero" : ""}${open ? " site-header--menu-open" : ""}${scrollState.pathname === pathname && scrollState.scrolled ? " is-scrolled" : ""}${scrollState.pathname === pathname && scrollState.hidden && !open ? " is-hidden" : ""}`}
       onFocusCapture={() =>
         setScrollState((current) =>
           current.hidden ? { ...current, hidden: false } : current,
@@ -105,10 +106,7 @@ export function Header() {
           ref={toggle}
           onClick={() => setOpen(!open)}
         >
-          <span>{open ? "Close" : "Menu"}</span>
-          <span className="site-menu-symbol" aria-hidden="true">
-            +
-          </span>
+          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
         <nav
           id="site-navigation"

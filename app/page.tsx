@@ -4,6 +4,7 @@ import {
   ArticleCard,
   Button,
   ExpertiseCards,
+  ImpactCards,
   Institutions,
   Portrait,
   Statistics,
@@ -80,7 +81,11 @@ export default function HomePage() {
             >
               Build your next chapter
             </Button>
-            <small>FOUNDER OF DIGITALLY NEXT, iMET GLOBAL &amp; iSoCIAL</small>
+            <small>
+              FOUNDER OF <span className="site-brand-digitally-next">DIGITALLY NEXT</span>,{" "}
+              <span className="site-brand-imet">iMET GLOBAL</span> &amp;{" "}
+              <span className="site-brand-isocial">iSoCIAL</span>
+            </small>
           </div>
         </div>
       </section>
@@ -97,7 +102,7 @@ export default function HomePage() {
             <h3 className="site-subtitle">Entrepreneur. Strategist. Mentor.</h3>
             <p>
               I work at the intersection of business, digital branding and
-              education-helping ambitious people and organizations turn
+              education, helping ambitious people and organizations turn
               possibility into progress.
             </p>
             <p>
@@ -113,7 +118,7 @@ export default function HomePage() {
         </div>
       </Surface>
       <Statistics />
-      <Surface>
+      <Surface className="site-home-expertise">
         <h2 data-reveal>
           Clarity before visibility.
           <br />
@@ -151,17 +156,21 @@ export default function HomePage() {
         <Institutions />
       </Surface>
       <Ventures />
-      <Surface>
-        <h2 data-reveal>
-          BUSINESS AMBITION.
-          <br />
-          HUMAN IMPACT.
-        </h2>
-        <p className="site-section-description" data-reveal>
-          Three connected ways to turn experience into progress for people,
-          organizations and communities.
-        </p>
-        <ExpertiseCards impactCards />
+      <Surface className="site-home-impact">
+        <div className="site-impact-layout">
+          <div className="site-impact-intro" data-reveal>
+            <h2>
+              BUSINESS AMBITION.
+              <br />
+              HUMAN IMPACT.
+            </h2>
+            <p>
+              Three connected ways to turn experience into progress for people,
+              organizations and communities.
+            </p>
+          </div>
+          <ImpactCards />
+        </div>
       </Surface>
       <Surface dark>
         <h2 data-reveal>

@@ -47,7 +47,7 @@ export const CONTACT = {
   whatsapp: "+91 98104 09943",
   whatsappHref: "https://wa.me/919810409943",
   address: [
-    "DigitallyNext · iMET Global",
+    "Digitally Next · iMET Global",
     "Business India Complex, Uday Park,",
     "Adjacent to August Kranti Marg,",
     "Behind South Ex-II, Delhi 110049",
