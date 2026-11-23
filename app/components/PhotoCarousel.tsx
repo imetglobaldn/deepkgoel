@@ -100,13 +100,14 @@ export default function PhotoCarousel() {
                 alt={photo.alt}
                 fill
                 sizes="(max-width: 800px) 100vw, 65vw"
-                className={photo.id === "brics-gathering" ? "site-contain" : ""}
+                className={photo.contain ? "site-contain" : ""}
               />
             </div>
           ))}
         </div>
         <div className="site-carousel-counter" aria-hidden="true">
-          <b key={index}>0{index + 1}</b> <span>/ 0{eventPhotos.length}</span>
+          <b key={index}>{String(index + 1).padStart(2, "0")}</b>{" "}
+          <span>/ {String(eventPhotos.length).padStart(2, "0")}</span>
         </div>
       </div>
       <div className="site-carousel-copy">

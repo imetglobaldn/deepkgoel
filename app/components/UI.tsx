@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, Compass, TrendingUp } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { ViewTransition, type CSSProperties, type ReactNode } from "react";
 import StatisticsCounters from "./StatisticsCounters";
 import VentureCards from "./VentureCards";
@@ -196,7 +196,6 @@ export function Footer() {
         <div className="site-footer-main">
           <div className="site-footer-brand">
             <Logo />
-            <p>Writer · Strategist · Media Professional</p>
           </div>
           <div className="site-footer-socials" aria-label="Social profiles">
             <div className="site-footer-social-icons">
@@ -234,35 +233,49 @@ export function Statistics() {
     </Surface>
   );
 }
-/** The seated portrait from the original site: the photo sits in front of an
-    offset yellow frame, and his legs and shoes step out over both edges.
-    The frame is drawn by the stylesheet, so its colour follows the brand.
-    Pass `eager` where the portrait sits at the top of the page, as on About. */
+/** The portrait: Deepak at the MSME Champions of Change 2026 summit, in a
+    rounded photo with a yellow frame set behind it (drawn by the stylesheet,
+    so its colour follows the brand). Pass `eager` where the portrait sits at
+    the top of the page, as on About. */
 export function Portrait({ eager = false }: { eager?: boolean }) {
   return (
     <div className="site-portrait" data-reveal="zoom">
       <span className="site-portrait-frame" aria-hidden="true" />
       <Image
-        src="/images/portrait-seated.webp"
-        width={1172}
-        height={1552}
-        sizes="(max-width: 760px) 90vw, 36vw"
-        alt="Deepak Goel seated in an office chair, in a Digitally Next polo shirt"
+        src="/images/portrait-msme.webp"
+        width={675}
+        height={900}
+        sizes="(max-width: 760px) 90vw, 32vw"
+        alt="Deepak Goel at the MSME Champions of Change 2026 National Summit in New Delhi"
         loading={eager ? "eager" : undefined}
       />
     </div>
   );
 }
+/** The three homepage pathways, each with a real event photo (Figma "02 /
+    Field notes", node 344:691). Sources are in sources.json. */
 export function ExpertiseCards() {
   const pathways = [
-    { icon: Compass, action: "Shape your brand" },
-    { icon: TrendingUp, action: "Build your growth strategy" },
-    { icon: BookOpen, action: "Put learning into practice" },
+    {
+      action: "Shape your brand",
+      photo: "/images/expertise/brand-strategy.webp",
+      alt: "A full conference hall at an SMBConnect business session",
+    },
+    {
+      action: "Build your growth strategy",
+      photo: "/images/expertise/business-growth.webp",
+      alt: "Deepak Goel with speakers on the SMBConnect stage",
+    },
+    {
+      action: "Put learning into practice",
+      photo: "/images/expertise/practical-learning.webp",
+      alt: "Participants working at computers during an iMET Global session",
+    },
   ];
   return (
     <div className="site-expertise-grid">
       {expertise.map((item, index) => {
-        const { icon: Icon, action } = pathways[index];
+        const { action, photo, alt } = pathways[index];
         return (
           <article data-reveal key={item.title}>
             <Link
@@ -270,21 +283,25 @@ export function ExpertiseCards() {
               href={`/expertise#capability-${index + 1}`}
               aria-labelledby={`expertise-title-${index}`}
             >
-              <div className="site-expertise-card-top" aria-hidden="true">
-                <span className="site-section-index">0{index + 1}</span>
-                <span className="site-expertise-icon">
-                  <Icon size={30} strokeWidth={1.5} />
-                </span>
+              <div className="site-expertise-photo">
+                <Image
+                  src={photo}
+                  alt={alt}
+                  fill
+                  sizes="(max-width: 760px) 100vw, 30vw"
+                />
               </div>
-              <div className="site-expertise-copy">
-                <h3 id={`expertise-title-${index}`}>{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
-              <div className="site-expertise-link" aria-hidden="true">
-                <span>{action}</span>
-                <span className="site-expertise-arrow">
-                  <Arrow />
-                </span>
+              <div className="site-expertise-body">
+                <div className="site-expertise-copy">
+                  <h3 id={`expertise-title-${index}`}>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+                <div className="site-expertise-link" aria-hidden="true">
+                  <span>{action}</span>
+                  <span className="site-expertise-arrow">
+                    <Arrow />
+                  </span>
+                </div>
               </div>
             </Link>
           </article>

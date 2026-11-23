@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <circle cx="32" cy="32" r="32" fill="#f4d62b" />
-  <text x="32" y="34" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#111512" text-anchor="middle" dominant-baseline="central">DG</text>
+  <style>
+    path { stroke: #111512; }
+    @media (prefers-color-scheme: dark) { path { stroke: #f4d62b; } }
+  </style>
+  <g fill="none" stroke-width="7" stroke-linejoin="round" stroke-linecap="butt">
+    <path d="M7.5 17.5V46.5H13A14.5 14.5 0 0 0 13 17.5Z" />
+    <path d="M56.2 22.3A14.5 14.5 0 1 0 60 32H46.5" />
+  </g>
 </svg>

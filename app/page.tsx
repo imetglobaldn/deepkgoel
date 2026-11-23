@@ -13,6 +13,7 @@ import {
   Ventures,
 } from "./components/UI";
 import { articles } from "./data/content";
+import Moments from "./components/Moments";
 import PageTransition from "./components/PageTransition";
 
 // The title, description and sharing tags come from the root layout.
@@ -135,24 +136,7 @@ export default function HomePage() {
           </h2>
           <Button href="/book-your-time">Invite me to speak</Button>
         </div>
-        <div className="site-speaking-photos">
-          <Image
-            src="/images/speaking.png"
-            width={1200}
-            height={733}
-            sizes="(max-width: 760px) 100vw, 50vw"
-            alt="Deepak Goel speaking at AIMA"
-            data-reveal="zoom"
-          />
-          <Image
-            src="/images/workshop.png"
-            width={1200}
-            height={733}
-            sizes="(max-width: 760px) 100vw, 50vw"
-            alt="Deepak in conversation with workshop participants"
-            data-reveal="zoom"
-          />
-        </div>
+        <Moments />
         <Institutions />
       </Surface>
       <Ventures />

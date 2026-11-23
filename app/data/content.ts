@@ -101,8 +101,35 @@ export type EventPhoto = {
   alt: string;
   sourceUrl: string;
   sourceLabel: string;
+  /** Show the whole photo inside the frame instead of filling it (for tall photos). */
+  contain?: boolean;
 };
 export const eventPhotos: EventPhoto[] = [
+  {
+    id: "msme-award",
+    title: "MSME Champions of Change 2026",
+    date: "19 November 2026",
+    description:
+      "Digitally Next was named a Champion of Change for Digital Transformation (AI & Data) at the National Summit & Awards in New Delhi.",
+    image: "/images/events/msme-award.jpg",
+    alt: "Deepak Goel receiving the MSME Champions of Change 2026 award on stage",
+    sourceUrl:
+      "https://www.linkedin.com/posts/deegoel_brics-investup-brics-activity-7530653868410662912-d2Zp",
+    sourceLabel: "Deepak Goel · LinkedIn",
+  },
+  {
+    id: "msme-press",
+    title: "A question for a question",
+    date: "19 November 2026",
+    description:
+      "Asked by reporters whether the government is doing enough for MSMEs, Deepak asked back: are we communicating what is being done?",
+    image: "/images/events/msme-press.jpg",
+    alt: "Deepak Goel answering reporters’ questions at the MSME Champions of Change summit",
+    sourceUrl:
+      "https://www.linkedin.com/posts/deegoel_brics-investup-brics-activity-7530653868410662912-d2Zp",
+    sourceLabel: "Deepak Goel · LinkedIn",
+    contain: true,
+  },
   {
     id: "brics-stage",
     title: "BRICS+ Dialogue 2026",
@@ -138,6 +165,7 @@ export const eventPhotos: EventPhoto[] = [
     sourceUrl:
       "https://www.linkedin.com/posts/digitallynext_brics-newdelhi-dubai-activity-7504249188776542208-N2lH",
     sourceLabel: "Digitally Next · LinkedIn",
+    contain: true,
   },
   {
     id: "aima",
@@ -161,6 +189,24 @@ export const eventPhotos: EventPhoto[] = [
     sourceUrl: "https://deepakgoel.in/",
     sourceLabel: "Deepak Goel · Official archive",
   },
+];
+
+/** Real event photos for the strip that scrolls on the homepage. Photos shown
+    elsewhere on the homepage are left out. Sources are in sources.json. */
+export const moments = [
+  { src: "/images/events/msme-award.jpg", width: 800, height: 462, alt: "Deepak Goel receiving the MSME Champions of Change 2026 award" },
+  { src: "/images/speaking.png", width: 1200, height: 733, alt: "Deepak Goel speaking at the All India Management Association" },
+  { src: "/images/moments/smbconnect-award.webp", width: 675, height: 900, alt: "Deepak Goel holding an award at SMBConnect" },
+  { src: "/images/moments/imet-teaching.webp", width: 900, height: 662, alt: "Deepak Goel teaching a class at iMET Global" },
+  { src: "/images/events/msme-press.jpg", width: 750, height: 1000, alt: "Deepak Goel answering reporters at the MSME Champions of Change summit" },
+  { src: "/images/workshop.png", width: 1200, height: 733, alt: "Deepak Goel in conversation with workshop participants" },
+  { src: "/images/moments/jaipur.webp", width: 675, height: 900, alt: "Deepak Goel at the SMBConnect event in Jaipur" },
+  { src: "/images/moments/msme-stage.webp", width: 800, height: 600, alt: "Award winners on stage at MSME Champions of Change 2026" },
+  { src: "/images/events/brics-portrait.jpg", width: 1152, height: 1536, alt: "Deepak Goel at BRICS+ Dialogue 2026 in New Delhi" },
+  { src: "/images/moments/imet-classroom.webp", width: 900, height: 506, alt: "A classroom session at iMET Global" },
+  { src: "/images/moments/smbconnect-team.webp", width: 675, height: 900, alt: "Deepak Goel with fellow speakers at SMBConnect" },
+  { src: "/images/moments/msme-award-group.webp", width: 800, height: 533, alt: "Deepak Goel with the presenters of the MSME Champions of Change award" },
+  { src: "/images/events/india-japan-cover.jpg", width: 1152, height: 720, alt: "Cover of Deepak Goel's India-Japan dialogue video" },
 ];
 
 /** The faint picture behind the heading at the top of an inner page. */
@@ -238,6 +284,8 @@ export const capabilities = [
     title: "Digital & brand strategy",
     description:
       "Positioning, demand generation, digital communication and personal branding.",
+    photo: "/images/expertise/brand-strategy.webp",
+    alt: "A full conference hall at an SMBConnect business session",
     topics: [
       "Digital branding",
       "Demand generation",
@@ -248,6 +296,8 @@ export const capabilities = [
     title: "Business growth",
     description:
       "International B2B marketing, business development and the systems behind sustainable growth.",
+    photo: "/images/expertise/business-growth.webp",
+    alt: "Deepak Goel with speakers on the SMBConnect stage",
     topics: [
       "Strategic management",
       "International marketing",
@@ -258,6 +308,8 @@ export const capabilities = [
     title: "Learning & leadership",
     description:
       "Industry-focused programs that connect practical skills with professional ambitions.",
+    photo: "/images/moments/imet-teaching.webp",
+    alt: "Deepak Goel teaching a class at iMET Global",
     topics: [
       "Leadership & team building",
       "Business communication",
@@ -268,6 +320,8 @@ export const capabilities = [
     title: "Speaking & mentoring",
     description:
       "Honest perspectives and practical conversations for organizations, institutions and entrepreneurs.",
+    photo: "/images/speaking.png",
+    alt: "Deepak Goel speaking at the All India Management Association",
     topics: [
       "Keynotes & panels",
       "Master classes",

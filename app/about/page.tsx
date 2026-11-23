@@ -117,7 +117,7 @@ export default function AboutPage() {
           <div>
             <h2 data-reveal>
               ALWAYS
-              <br />A STUDENT.
+              <br />A LEARNER.
             </h2>
             <p className="site-section-description" data-reveal>
               The foundations. And a commitment to keep learning.

@@ -1,5 +1,21 @@
+import Image from "next/image";
+import {
+  Briefcase,
+  Code2,
+  GraduationCap,
+  Headset,
+  MonitorPlay,
+  RadioTower,
+} from "lucide-react";
+import CapabilityIndex from "../components/CapabilityIndex";
 import Disclosure from "../components/Disclosure";
-import { Button, Institutions, PageIntro, Surface } from "../components/UI";
+import {
+  Button,
+  Institutions,
+  PageIntro,
+  Surface,
+  TextLink,
+} from "../components/UI";
 import {
   capabilities,
   INDUSTRIES,
@@ -18,6 +34,16 @@ export const metadata = pageMetadata({
   path: "/expertise",
 });
 
+// One icon per industry, in the order of INDUSTRIES.
+const industryIcons = [
+  MonitorPlay,
+  GraduationCap,
+  Headset,
+  Code2,
+  Briefcase,
+  RadioTower,
+];
+
 export default function ExpertisePage() {
   return (
     <PageTransition>
@@ -28,51 +54,86 @@ export default function ExpertisePage() {
       >
         {intro}
       </PageIntro>
-      <Surface>
-        <div className="site-capabilities">
-          {capabilities.map((item, i) => (
-            <article
-              id={`capability-${i + 1}`}
-              className="site-capability"
-              key={item.title}
-              data-reveal
-            >
-              <span className="site-number">0{i + 1}</span>
-              <div>
-                <h2>{item.title}</h2>
-                <p>{item.description}</p>
-              </div>
-              <div>
-                <ul>
-                  {item.topics.map((topic) => (
-                    <li key={topic}>{topic}</li>
-                  ))}
-                </ul>
-                <Button
-                  href={`/book-your-time?interest=${encodeURIComponent(i === 3 ? "Keynote Speaking" : "Other")}`}
-                  dark
-                >
-                  Start a conversation
-                </Button>
-              </div>
-            </article>
-          ))}
+      <Surface className="site-cap-section">
+        <div className="site-section-head">
+          <h2 data-reveal>
+            WHERE I
+            <br />
+            CAN HELP.
+          </h2>
+          <p data-reveal>
+            Four ways to work together, from brand and growth strategy to
+            learning programs and the stage.
+          </p>
+        </div>
+        <div className="site-cap-layout">
+          <CapabilityIndex titles={capabilities.map((item) => item.title)} />
+          <div className="site-cap-panels">
+            {capabilities.map((item, i) => (
+              <article
+                id={`capability-${i + 1}`}
+                className="site-glass site-cap-panel"
+                key={item.title}
+                data-reveal
+              >
+                <div className="site-cap-photo">
+                  <Image
+                    src={item.photo}
+                    alt={item.alt}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 62vw"
+                  />
+                  <span className="site-cap-number" aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                </div>
+                <div className="site-cap-body">
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                  <div>
+                    <ul className="site-cap-topics">
+                      {item.topics.map((topic) => (
+                        <li key={topic}>{topic}</li>
+                      ))}
+                    </ul>
+                    <TextLink
+                      href={`/book-your-time?interest=${encodeURIComponent(i === 3 ? "Keynote Speaking" : "Other")}`}
+                    >
+                      Start a conversation
+                    </TextLink>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </Surface>
       <Surface dark>
-        <h2 data-reveal>
-          DIFFERENT INDUSTRIES.
-          <br />
-          CONNECTED THINKING.
-        </h2>
-        <div className="site-industries">
-          {INDUSTRIES.map((industry, i) => (
-            <div key={industry} data-reveal>
-              <span>0{i + 1}</span>
-              <h3>{industry}</h3>
-            </div>
-          ))}
+        <div className="site-section-head">
+          <h2 data-reveal>
+            DIFFERENT INDUSTRIES.
+            <br />
+            CONNECTED THINKING.
+          </h2>
+          <p data-reveal>
+            Experience built across the sectors where digital change moves
+            fastest.
+          </p>
         </div>
+        <ul className="site-industry-tiles">
+          {INDUSTRIES.map((industry, i) => {
+            const Icon = industryIcons[i];
+            return (
+              <li key={industry} className="site-glass" data-reveal>
+                <Icon size={28} strokeWidth={1.5} aria-hidden="true" />
+                <span>0{i + 1}</span>
+                <h3>{industry}</h3>
+              </li>
+            );
+          })}
+        </ul>
         <Institutions />
       </Surface>
       <Surface>

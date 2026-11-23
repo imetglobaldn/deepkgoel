@@ -166,5 +166,31 @@
       }
     ],
     "note": "Distinct archival photographs, with no event dates invented and no overlap with the approved People in focus images."
+  },
+  "msmeChampionsOfChange2026": {
+    "source": "https://www.linkedin.com/posts/deegoel_brics-investup-brics-activity-7530653868410662912-d2Zp",
+    "shortLink": "https://lnkd.in/p/gwpKn9rp",
+    "eventDate": "2026-11-19",
+    "note": "Deepak Goel LinkedIn post. Event name, date and venue verified from the event banner in the post (MSME Champions of Change 2026, National Summit & Awards, 19 November 2026, New Delhi). Digitally Next won in Digital Transformation (AI & Data), per the post. Original photos, not edited beyond resizing and one crop.",
+    "images": {
+      "/images/events/msme-award.jpg": "Award on stage (carousel, moments strip)",
+      "/images/events/msme-press.jpg": "Press questions (carousel, moments strip)",
+      "/images/portrait-msme.webp": "Deepak beside the event banner, top 60px cropped (homepage and About portrait)",
+      "/images/moments/msme-stage.webp": "Winners on stage (moments strip)",
+      "/images/moments/msme-award-group.webp": "With the award presenters (moments strip)"
+    }
+  },
+  "homepageAndExpertisePhotos": {
+    "note": "Real event photographs from Deepak Goel LinkedIn posts and iMET Global official site, first collected by Codex (see figmaImpactDraftPhotos/figmaExpertiseDraftPhotos). Resized only.",
+    "images": {
+      "/images/expertise/brand-strategy.webp": "SMBConnect conference hall; https://www.linkedin.com/posts/deegoel_therise-msmeindia-digitalbranding-activity-7146417745163710464-Pj80",
+      "/images/expertise/business-growth.webp": "SMBConnect stage; same LinkedIn post",
+      "/images/expertise/practical-learning.webp": "iMET computer lab; https://www.imetglobal.com/gallery/1.webp",
+      "/images/moments/imet-teaching.webp": "Deepak teaching; https://www.imetglobal.com/gallery/2.webp",
+      "/images/moments/smbconnect-award.webp": "Holding an award at SMBConnect; same SMBConnect LinkedIn post",
+      "/images/moments/smbconnect-team.webp": "With fellow speakers at SMBConnect; same SMBConnect LinkedIn post",
+      "/images/moments/jaipur.webp": "SMBConnect Jaipur; https://www.linkedin.com/posts/deegoel_amazing-kickstart-of-jaipur-event-of-smbconnect-activity-7112681460322451457-CCl7",
+      "/images/moments/imet-classroom.webp": "iMET Global cohort 01 image, official iMET site"
+    }
   }
 }

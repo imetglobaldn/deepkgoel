@@ -799,45 +799,47 @@ textarea {
   gap: 64px;
   align-items: center;
 }
-/* The seated portrait (see Portrait in UI.tsx). The picture is a cut-out: a
-   photo panel with a soft shadow, and the legs and shoes stepping out over
-   its left and bottom edges. A frame sits behind it, up and to the left, as
-   on the original site; its position is measured from the picture, so it is
-   given in percentages of the picture's box. */
+/* The portrait (see Portrait in UI.tsx): a rounded photo with a yellow
+   frame set behind it, up and to the left, echoing the original site. */
 .site-portrait {
   position: relative;
-  aspect-ratio: 1172 / 1552;
   container-type: inline-size;
   isolation: isolate;
+  padding: 8cqi 0 0 8cqi;
 }
 .site-portrait-frame {
   position: absolute;
-  left: 6.06%;
-  top: 0.32%;
-  width: 63.91%;
-  height: 79.96%;
+  left: 0;
+  top: 0;
+  width: 72%;
+  height: 76%;
   z-index: -1;
   border: max(6px, 1.8cqi) solid var(--yellow);
+  border-radius: 6px;
   pointer-events: none;
   transition: translate 0.9s var(--ease-ios);
 }
 .site-portrait > img {
   width: 100%;
   height: auto;
-}
-/* On a desktop the whole portrait fits the window beside its text. */
-@media (min-width: 761px) {
-  .site-portrait {
-    width: min(100%, calc((100svh - 2 * clamp(56px, 6.67vw, 96px) - 24px) * 1172 / 1552));
-    justify-self: center;
-  }
+  border-radius: 20px;
+  box-shadow: 0 32px 56px -34px #11151299;
 }
 /* The frame settles into place as the portrait appears. */
 .site-portrait.site-reveal-ready .site-portrait-frame {
-  translate: 3% 3%;
+  translate: 4% 4%;
 }
 .site-portrait.is-visible .site-portrait-frame {
   translate: none;
+}
+/* On a desktop the whole portrait fits the window beside its text. The
+   photo is 3:4 and sits 8% in from the frame, so the box is 1.307 times as
+   tall as it is wide. */
+@media (min-width: 761px) {
+  .site-portrait {
+    width: min(100%, calc((100svh - 2 * clamp(56px, 6.67vw, 96px) - 24px) / 1.307));
+    justify-self: center;
+  }
 }
 .site .site-subtitle {
   font-size: 24px;
@@ -876,12 +878,6 @@ textarea {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
-.site-number {
-  font-family: var(--font-heading), sans-serif;
-  font-weight: 700;
-  font-size: 44px;
-  line-height: 1;
-}
 /* Distinct homepage pathways and an editorial impact list. */
 .site-expertise-grid {
   display: grid;
@@ -893,33 +889,42 @@ textarea {
 }
 .site-expertise-card {
   width: 100%;
-  padding: 32px;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 28px;
   transition: transform 0.4s var(--spring), border-color 0.25s, box-shadow 0.25s;
 }
-.site-expertise-card-top {
+/* A real event photo across the top of each pathway (Figma 344:691). */
+.site-expertise-photo {
+  position: relative;
+  aspect-ratio: 409 / 224;
+  overflow: hidden;
+  background: #17202b;
+}
+.site-expertise-photo > img {
+  object-fit: cover;
+  transition: scale 0.8s var(--ease-ios);
+}
+.site-expertise-body {
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+.site .site-expertise-copy h3 {
+  font-size: 28px;
+  line-height: 1.08;
 }
 .site-section-index {
   font: 500 18px/1 var(--font-heading), sans-serif;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
-.site-expertise-icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--yellow);
-}
 .site-expertise-copy {
   display: grid;
-  gap: 16px;
+  gap: 20px;
 }
 .site-expertise-copy p,
 .site-impact-item p {
@@ -935,8 +940,9 @@ textarea {
   border-top: 1px solid #11151226;
   padding-top: 20px;
   margin-top: auto;
+  font-family: var(--font-heading), sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 .site-expertise-arrow {
   display: grid;
@@ -970,6 +976,9 @@ textarea {
   }
   .site-expertise-card:hover .site-expertise-arrow svg {
     transform: translate(2px, -2px);
+  }
+  .site-expertise-card:hover .site-expertise-photo > img {
+    scale: 1.04;
   }
 }
 .site-home-impact > .site-section {
@@ -1034,13 +1043,11 @@ textarea {
   margin: 0;
 }
 @media (max-width: 1000px) {
-  .site-expertise-card { padding: 24px; }
   .site-impact-intro { grid-template-columns: 1fr; gap: 24px; }
   .site-impact-intro p { max-width: 560px; }
 }
 @media (max-width: 760px) {
   .site-expertise-grid { grid-template-columns: 1fr; gap: 16px; }
-  .site-expertise-card { gap: 24px; }
   .site-home-impact > .site-section { padding-block: 56px; }
   .site-impact-grid { grid-template-columns: 1fr; gap: 24px; }
   .site .site-impact-copy h3 { min-height: 0; font-size: 28px; }
@@ -1061,20 +1068,70 @@ textarea {
   flex-shrink: 0;
   margin-bottom: 12px;
 }
-.site-speaking-photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+/* Event photos drifting right to left, edge to edge (see Moments.tsx). The
+   track holds the list twice and moves by exactly one copy, so it loops
+   without a seam. The photos fade out at both screen edges. */
+.site-moments {
+  --moment-height: clamp(240px, 30vw, 400px);
+  --moment-gap: 24px;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.site-speaking-photos img {
-  width: 100%;
-  aspect-ratio: 1.57;
+.site-moments-track {
+  display: flex;
+  width: max-content;
+  animation: site-moments-drift 90s linear infinite;
+}
+.site-moments-track > ul {
+  display: flex;
+  gap: var(--moment-gap);
+  padding-right: var(--moment-gap);
+  margin: 0;
+}
+.site-moments li {
+  flex: none;
+  height: var(--moment-height);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #17202b;
+}
+.site-moments img {
+  width: auto;
+  max-width: none;
+  height: 100%;
   object-fit: cover;
-  transition: filter 0.4s;
+  transition: scale 0.8s var(--ease-ios);
 }
-.site-speaking-photos img:hover {
-  filter: brightness(1.06);
+@keyframes site-moments-drift {
+  to {
+    translate: -50% 0;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-moments:hover .site-moments-track {
+    animation-play-state: paused;
+  }
+  .site-moments li:hover img {
+    scale: 1.04;
+  }
+}
+/* With reduced motion the strip stands still and scrolls sideways instead. */
+@media (prefers-reduced-motion: reduce) {
+  .site-moments {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .site .site-moments-track {
+    animation: none;
+  }
+  .site-moments-track > ul[aria-hidden] {
+    display: none;
+  }
 }
 .site-institutions {
   margin-top: 40px;
@@ -1335,11 +1392,6 @@ textarea {
   font-size: 30px;
   line-height: 36px;
 }
-.site-footer-brand > p {
-  color: #b4b5b0;
-  font-size: 14px;
-  line-height: 20px;
-}
 .site-footer a {
   transition: color 0.2s;
 }
@@ -1370,8 +1422,10 @@ textarea {
 .site-footer-social-icons > a:hover {
   transform: translateY(-2px);
 }
+/* Every page opens with a dark heading area, and the header floats over it
+   transparently (as on the homepage), so the area starts under the header. */
 .site-page-intro > .site-section {
-  padding-block: 80px;
+  padding-block: calc(var(--site-header-height) + 80px) 80px;
 }
 .site-page-intro h1 {
   max-width: 1220px;
@@ -1690,47 +1744,189 @@ textarea {
     flex-basis: 88px;
   }
 }
-.site-capabilities {
+/* Expertise page: a list of the four capabilities stays beside the panels
+   and highlights the one being read (see CapabilityIndex.tsx). */
+.site-cap-layout {
   display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 64px;
+  align-items: start;
 }
-.site-capability {
+.site-cap-index {
+  position: sticky;
+  top: calc(var(--site-header-height) + 32px);
+  transition: top 0.5s var(--ease-ios);
+}
+.site:has(.site-header.is-hidden) .site-cap-index {
+  top: 48px;
+}
+.site-cap-index ol {
   display: grid;
-  grid-template-columns: 64px 1.3fr 1fr;
-  gap: 32px;
-  border-top: 1px solid #11151233;
-  padding-top: 32px;
-  scroll-margin-top: 32px;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid #11151226;
 }
-.site-capability h2 {
-  font-size: 44px;
-  margin-bottom: 20px;
-}
-.site-capability p {
-  color: var(--muted);
-}
-.site-capability li {
-  padding: 10px 0;
-  border-bottom: 1px solid #11151220;
-}
-.site-capability .site-button {
-  margin-top: 24px;
-}
-.site-industries {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  margin: 48px 0 64px;
-}
-.site-industries > div {
+.site-cap-index a {
+  position: relative;
   display: flex;
-  gap: 24px;
-  border-top: 1px solid #ffffff30;
-  padding-top: 24px;
+  gap: 16px;
+  padding: 12px 0 12px 20px;
+  color: var(--muted);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: color 0.3s;
 }
-.site-industries span {
+.site-cap-index a > span {
+  font-size: 12px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.site-cap-index a::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--yellow);
+  scale: 1 0;
+  transition: scale 0.45s var(--spring);
+}
+.site-cap-index a[aria-current] {
+  color: var(--ink);
+}
+.site-cap-index a[aria-current]::before {
+  scale: 1 1;
+}
+.site-cap-index a:hover {
+  color: var(--ink);
+}
+.site-cap-panels {
+  display: grid;
+  gap: 32px;
+}
+.site-cap-panel {
+  overflow: hidden;
+  padding: 0;
+  scroll-margin-top: calc(var(--site-header-height) + 32px);
+}
+.site-cap-photo {
+  position: relative;
+  aspect-ratio: 16 / 6;
+  overflow: hidden;
+  background: #17202b;
+}
+.site-cap-photo > img {
+  object-fit: cover;
+}
+.site-cap-number {
+  position: absolute;
+  left: 24px;
+  bottom: 20px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #111512b3;
+  color: #fff;
+  font-size: 13px;
+  backdrop-filter: blur(12px);
+}
+.site-cap-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 40px;
+  padding: 36px 40px 40px;
+}
+.site .site-cap-body h3 {
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.08;
+  margin-bottom: 16px;
+}
+.site-cap-body p {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.site-cap-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.site .site-cap-body .site-text-link {
+  color: var(--ink) !important;
+  border-color: #11151240;
+}
+.site-cap-topics li {
+  padding: 8px 14px;
+  border: 1px solid #11151226;
+  border-radius: 999px;
+  background: #ffffff59;
+  font-size: 14px;
+}
+/* Industries as a grid of glass tiles, each with its own icon. */
+.site-industry-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0 0 64px;
+  padding: 0;
+  list-style: none;
+}
+.site-industry-tiles > li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 28px;
+}
+.site-industry-tiles svg {
+  grid-row: span 2;
+  width: 52px;
+  height: 52px;
+  padding: 12px;
+  border-radius: 50%;
+  background: #f4d62b1f;
+  color: var(--yellow);
+}
+.site-industry-tiles span {
   font-size: 12px;
   color: var(--yellow);
+}
+.site .site-industry-tiles h3 {
+  font-size: 22px;
+}
+@media (max-width: 1100px) {
+  .site-cap-layout {
+    grid-template-columns: 1fr;
+  }
+  /* Without room beside the panels, the list is not needed. */
+  .site-cap-index {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .site-cap-body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+  .site-cap-photo {
+    aspect-ratio: 16 / 10;
+  }
+  .site-industry-tiles {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .site-industry-tiles > li {
+    padding: 20px;
+  }
 }
 .site-training details {
   border-top: 1px solid #11151240;
@@ -1829,7 +2025,7 @@ textarea {
   margin-top: 40px;
 }
 .site-reader-intro > .site-section {
-  padding-block: 88px 96px;
+  padding-block: calc(var(--site-header-height) + 88px) 96px;
 }
 .site-reader-intro > .site-section > p:last-child {
   font-size: 16px;
@@ -3066,10 +3262,6 @@ textarea {
   .site-contact-grid {
     gap: 40px;
   }
-  .site-capability {
-    grid-template-columns: 48px 1fr 1fr;
-    gap: 24px;
-  }
   .site-explorer-toolbar {
     align-items: flex-start;
     flex-direction: column;
@@ -3324,18 +3516,11 @@ textarea {
   .site-grid-three {
     grid-template-columns: 1fr;
   }
-  .site-number {
-    font-size: 40px;
-  }
   .site-speaking-head > .site-button {
     margin-bottom: 0;
   }
-  .site-speaking-photos {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .site-speaking-photos img {
-    aspect-ratio: 1.65;
+  .site-moments {
+    --moment-gap: 12px;
   }
   .site .site-speaking-title {
     font-size: 36px;
@@ -3437,12 +3622,8 @@ textarea {
     font-size: 28px;
     line-height: 34px;
   }
-  .site-footer-brand > p {
-    font-size: 12px;
-    line-height: 18px;
-  }
   .site-page-intro > .site-section {
-    padding-block: 56px;
+    padding-block: calc(var(--site-header-height) + 56px) 56px;
   }
   .site-page-intro h1 {
     font-size: clamp(40px, 10.8vw, 64px);
@@ -3513,33 +3694,6 @@ textarea {
   .site-timeline p {
     font-size: 14px;
   }
-  .site-capabilities {
-    gap: 48px;
-  }
-  .site-capability {
-    grid-template-columns: 40px 1fr;
-    gap: 20px;
-  }
-  .site-capability h2 {
-    font-size: 30px;
-  }
-  .site-capability > div:last-child {
-    grid-column: 2;
-  }
-  .site-capability .site-number {
-    font-size: 32px;
-  }
-  .site-industries {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px 24px;
-  }
-  .site-industries > div {
-    display: block;
-  }
-  .site-industries h3 {
-    font-size: 22px;
-    margin-top: 16px;
-  }
   .site-training summary {
     font-size: 22px;
   }
@@ -3554,7 +3708,7 @@ textarea {
     font-size: 40px;
   }
   .site-reader-intro > .site-section {
-    padding-block: 56px;
+    padding-block: calc(var(--site-header-height) + 56px) 56px;
   }
   .site-reader-body {
     font-size: 17px;

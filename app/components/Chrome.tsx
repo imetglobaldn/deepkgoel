@@ -89,7 +89,7 @@ export function Header() {
   return (
     <header
       ref={header}
-      className={`site-header${pathname === "/" ? " site-header--hero" : ""}${open ? " site-header--menu-open" : ""}${scrollState.pathname === pathname && scrollState.scrolled ? " is-scrolled" : ""}${scrollState.pathname === pathname && scrollState.hidden && !open ? " is-hidden" : ""}`}
+      className={`site-header site-header--hero${open ? " site-header--menu-open" : ""}${scrollState.pathname === pathname && scrollState.scrolled ? " is-scrolled" : ""}${scrollState.pathname === pathname && scrollState.hidden && !open ? " is-hidden" : ""}`}
       onFocusCapture={() =>
         setScrollState((current) =>
           current.hidden ? { ...current, hidden: false } : current,

@@ -56,7 +56,7 @@ Last updated: 23 November 2026.
 - Images on every page cannot be selected or dragged.
 - The Figma file was updated to match (see "Figma" below).
 
-### 5. Portrait, Contact background, content fixes (23 November 2026, not yet committed)
+### 5. Portrait, Contact background, content fixes (23 November 2026, commit 92f9608)
 - **Portrait** (homepage "The person behind the ideas" and About "Curious by nature"): now the seated full-length photo from the original site, with the legs and shoes stepping out over the edge of the photo and an offset frame behind it. The frame is drawn in CSS in brand yellow (the original was cyan). Source: `Deepak_Goul.png` from the old WordPress uploads, cyan frame removed, saved as `public/images/portrait-seated.webp`. The old square crop `public/images/portrait.webp` was removed. On desktop the portrait is capped to the window height.
 - **Contact and not-found backgrounds**: new Codex image of a dark meeting corner (two leather armchairs, coffee, notebook, brass lamp), `public/images/intro/conversation.webp`. It replaces `lounge.webp` (a New York skyline that did not suit the brand), which was removed.
 - **Copy fixes**: glued words left by the dash replacement ("education, helping", "perspective, and", "every week: a small", two in `articles.json`); "DigitallyNext" now "Digitally Next" in the contact address; the footer's X icon was labelled "Twitter" for screen readers, now "X"; Media gallery note no longer says "Verified".
@@ -122,13 +122,28 @@ Last updated: 23 November 2026.
 - Figma implementation notes: explicitly set component vertical sizing to HUG; unlike auto-layout frame helpers, some new components initially retain a 100px fixed height. Do not make index labels FILL when adjacent copy also fills. Resolve nested instance IDs directly when scoped instance queries return no children. Two headings had correct metadata but blank screenshots: draft 05 was repaired with a clone of the working heading; draft 06 was rebuilt as two editable text lines in auto-layout `352:859`. Failed tool mutations with `safeToRetryWithoutCanvasRead: true` were corrected and retried, without leaving duplicate drafts.
 - Await Karan's selection before applying an expertise draft to the actual homepage or code. The requested six-draft work is complete; it is not an approved site redesign yet.
 
+### 14. Deploy fix and cleanup (23 November 2026, Claude Code, commit 6329b28)
+- Vercel failed on 92f9608 because production builds went to `.next-build`. Production now uses the default `.next`; development keeps `.next-dev`. Do not change `distDir` for production again.
+- Deleted QA leftovers in `temp/` (screenshots, scripts, old build copies). Kept image originals (`temp/_deepakgoel.in`, `temp/default-theme-migration/previous`), `temp/figma-impact-photos` and `temp/v2-qa` (Playwright).
+
+### 15. MSME award, expertise redesign, photo strip and header (23 November 2026, Claude Code)
+- **MSME Champions of Change 2026** (LinkedIn post https://lnkd.in/p/gwpKn9rp; event 19 November 2026, New Delhi; Digitally Next won Digital Transformation, AI & Data). Two photos added at the start of the shared photo carousel (About and Media): the award and the press questions. `EventPhoto` has a new `contain` flag for tall photos.
+- **Portrait** (homepage and About): now Deepak beside the MSME event banner (`public/images/portrait-msme.webp`) in a rounded photo with the yellow frame behind it. The seated cut-out was removed.
+- **Homepage expertise cards** follow Figma draft "02 / Field notes" (`344:691`): a real event photo on top of each card, no numbers or icons.
+- **Homepage speaking section**: the two photos are replaced by `Moments.tsx`, a full-width strip of 13 event photos drifting right to left (90-second loop, pauses on hover, still and scrollable with reduced motion). List in `moments` in `app/data/content.ts`; photos shown elsewhere on the homepage are left out.
+- **Expertise page redesigned**: "Where I can help" with a sticky capability index that highlights the panel being read (`CapabilityIndex.tsx`), four photo panels with topic chips, industries as icon tiles, training accordion unchanged.
+- **Header** is transparent over the dark heading on every page (it was solid black off the homepage); page headings start under it.
+- **Favicon** (`app/icon.svg`): just the letters DG as strokes, ink on light tabs, yellow on dark tabs.
+- **Copy**: "Always a student" is now "Always a learner"; the footer role line ("Writer · Strategist · Media Professional") was removed.
+- Sources for every new photo are in `app/data/sources.json` (`msmeChampionsOfChange2026`, `homepageAndExpertisePhotos`). Figma has not been updated for steps 14 and 15.
+
 ## Figma
 
 File `IGnduQLB6VMXw4kzcj2oPz`, page "V9 - Brand Architect" (`92:271`). The inner-page frames are older than the code in places (copy, eyebrow labels, dark quote cards). Synced on 23 November: hero background pictures, gallery and carousel components, About two-column sections with the moved button, Expertise accordion, quote-card corner marks, and a behaviour note at about x 29500. Not synced: the homepage changes from step 1, and the portrait and Contact background from step 5. Upload JPEG or PNG to Figma; WebP uploads render blank.
 
 ## Open questions for Karan (from the 23 November content audit)
 
-1. Deepak's title is described four ways: "Founder" (homepage hero), "Group CEO" (page title, statistics), "Strategic Driver" (Digitally Next on About), and "Writer · Strategist · Media Professional" (footer). Which is right?
+1. Deepak's title is described three ways: "Founder" (homepage hero), "Group CEO" (page title, statistics) and "Strategic Driver" (Digitally Next on About). Which is right? (The footer role line was removed on 23 November.)
 2. The figures "18+ years", "34K+ community reach" and "6+ cities" come from the 2021 site. His career started around 1998, so the years figure is likely out of date. The cities line also leaves out Canada, which the biography includes.
 3. Two headings repeat: "The person behind the ideas" is both the homepage section and the About page heading; "Good questions. Better conversations." is both the homepage speaking section and the Media page heading.
 4. All six articles show 23 July 2021, the day they were moved to the old site, not when they were written.
