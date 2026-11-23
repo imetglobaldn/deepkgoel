@@ -1,6 +1,13 @@
+import Disclosure from "../components/Disclosure";
 import { Button, Institutions, PageIntro, Surface } from "../components/UI";
-import { capabilities, INDUSTRIES, TRAINING } from "../data/content";
+import {
+  capabilities,
+  INDUSTRIES,
+  introImages,
+  TRAINING,
+} from "../data/content";
 import { pageMetadata } from "../data/site";
+import PageTransition from "../components/PageTransition";
 
 const intro =
   "A practical perspective on brands, business and people. Built around the decisions that move you forward.";
@@ -13,8 +20,12 @@ export const metadata = pageMetadata({
 
 export default function ExpertisePage() {
   return (
-    <>
-      <PageIntro title="CLARITY FIRST." accent="THEN, PROGRESS.">
+    <PageTransition>
+      <PageIntro
+        title="CLARITY FIRST."
+        accent="THEN, PROGRESS."
+        image={introImages.expertise}
+      >
         {intro}
       </PageIntro>
       <Surface>
@@ -74,7 +85,7 @@ export default function ExpertisePage() {
               <br />
               TO ACTION.
             </h2>
-            <p className="site-section-description">
+            <p className="site-section-description" data-reveal>
               Workshops and master classes shaped around real professional
               challenges.
             </p>
@@ -103,21 +114,22 @@ export default function ExpertisePage() {
                 items: [TRAINING[12], TRAINING[13], TRAINING[14], TRAINING[5]],
               },
             ].map((group, i) => (
-              <details key={group.title} open={i === 0}>
-                <summary>
-                  {group.title}
-                  <span aria-hidden="true">+</span>
-                </summary>
+              <Disclosure
+                key={group.title}
+                title={group.title}
+                defaultOpen={i === 0}
+                group="training"
+              >
                 <ul>
                   {group.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-              </details>
+              </Disclosure>
             ))}
           </div>
         </div>
       </Surface>
-    </>
+    </PageTransition>
   );
 }

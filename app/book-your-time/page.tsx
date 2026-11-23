@@ -1,7 +1,8 @@
 import EnquiryForm from "../components/EnquiryForm";
 import { PageIntro, Surface } from "../components/UI";
-import { CONTACT, TYPES, socialLinks } from "../data/content";
+import { CONTACT, TYPES, introImages, socialLinks } from "../data/content";
 import { pageMetadata } from "../data/site";
+import PageTransition from "../components/PageTransition";
 
 const intro =
   "A keynote. A workshop. A new perspective. Tell me what you have in mind, and let’s take the next step.";
@@ -22,13 +23,17 @@ export default async function ContactPage({
     ? interest
     : "";
   return (
-    <>
-      <PageIntro title="YOUR NEXT MOVE" accent="STARTS HERE.">
+    <PageTransition>
+      <PageIntro
+        title="YOUR NEXT MOVE"
+        accent="STARTS HERE."
+        image={introImages.contact}
+      >
         {intro}
       </PageIntro>
       <Surface>
         <div className="site-contact-grid">
-          <aside className="site-contact-info">
+          <aside className="site-contact-info" data-reveal>
             <h2>LET’S CONNECT.</h2>
             <a className="site-contact-email" href={`mailto:${CONTACT.email}`}>
               {CONTACT.email}
@@ -71,6 +76,6 @@ export default async function ContactPage({
           <EnquiryForm initialType={initialType} />
         </div>
       </Surface>
-    </>
+    </PageTransition>
   );
 }

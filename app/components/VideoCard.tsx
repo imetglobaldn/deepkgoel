@@ -15,7 +15,7 @@ export default function VideoCard({
 }) {
   const [playing, setPlaying] = useState(false);
   return (
-    <article className="site-video-card">
+    <article className="site-video-card" data-reveal>
       <div className="site-video-stage">
         {playing ? (
           <iframe

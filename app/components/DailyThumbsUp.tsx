@@ -119,67 +119,68 @@ export default function DailyThumbsUp() {
     };
   }, [visible, open, paused, autoHide, close]);
   const quote = weeklyQuotes[day];
-  if (!visible) return null;
+  // The widget and its panel stay in the page the whole time and are shown
+  // or hidden with classes, so both can animate in and out (see globals.css).
   return (
     <aside
-      className={`site-daily-widget ${open ? "is-open" : ""}`}
+      className={`site-daily-widget${visible ? "" : " is-hidden"}${open ? " is-open" : ""}`}
       aria-label="Daily Thumbs Up"
       onKeyDown={(e) => {
         if (e.key === "Escape") close(true);
       }}
     >
-      {open && (
-        <div
-          className={`site-daily-panel${autoHide ? "" : " is-pinned"}`}
-          id="site-daily-quote"
-          role="region"
-          aria-labelledby="site-quote-title"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
-          onBlurCapture={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
-          }}
-        >
-          <div className="site-daily-heading">
-            <span className="site-daily-badge" aria-hidden="true">
-              <ThumbsUp size={18} />
+      <div
+        className={`site-daily-panel${autoHide ? "" : " is-pinned"}`}
+        id="site-daily-quote"
+        role="region"
+        aria-labelledby="site-quote-title"
+        // Closed, the panel cannot be reached by keyboard or screen reader.
+        inert={!open}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+        }}
+      >
+        <div className="site-daily-heading">
+          <span className="site-daily-badge" aria-hidden="true">
+            <ThumbsUp size={18} />
+          </span>
+          <p className="site-daily-title">
+            <span id="site-quote-title">DAILY THUMBS UP</span>
+            <span className="site-daily-day">
+              {weekdays[day]} · {quote.theme}
             </span>
-            <p className="site-daily-title">
-              <span id="site-quote-title">DAILY THUMBS UP</span>
-              <span className="site-daily-day">
-                {weekdays[day]} · {quote.theme}
-              </span>
-            </p>
-            <button aria-label="Close daily quote" onClick={() => close(true)}>
-              <X size={16} />
-            </button>
-          </div>
-          <blockquote>{quote.quote}</blockquote>
-          <p className="site-daily-author">Deepak Goel</p>
-          {/* The divider doubles as the countdown to the automatic close. */}
-          <div className="site-quote-timer" aria-hidden="true">
-            <span
-              style={{
-                animationPlayState: paused || !autoHide ? "paused" : "running",
-              }}
-            />
-          </div>
-          <div className="site-daily-links">
-            <Link href="/daily-thumbs-up" onClick={() => close()}>
-              All seven thoughts
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
-            <button
-              onClick={() => setAutoHide(!autoHide)}
-              aria-pressed={!autoHide}
-            >
-              <Pin size={13} aria-hidden="true" />
-              Keep open
-            </button>
-          </div>
+          </p>
+          <button aria-label="Close daily quote" onClick={() => close(true)}>
+            <X size={16} />
+          </button>
         </div>
-      )}
+        <blockquote>{quote.quote}</blockquote>
+        <p className="site-daily-author">Deepak Goel</p>
+        {/* The divider doubles as the countdown to the automatic close. */}
+        <div className="site-quote-timer" aria-hidden="true">
+          <span
+            style={{
+              animationPlayState: paused || !autoHide ? "paused" : "running",
+            }}
+          />
+        </div>
+        <div className="site-daily-links">
+          <Link href="/daily-thumbs-up" onClick={() => close()}>
+            All seven thoughts
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+          <button
+            onClick={() => setAutoHide(!autoHide)}
+            aria-pressed={!autoHide}
+          >
+            <Pin size={13} aria-hidden="true" />
+            Keep open
+          </button>
+        </div>
+      </div>
       <button
         ref={trigger}
         className="site-daily-trigger"
@@ -187,7 +188,7 @@ export default function DailyThumbsUp() {
           open ? "Close daily thought" : "Open today’s Daily Thumbs Up quote"
         }
         aria-expanded={open}
-        aria-controls={open ? "site-daily-quote" : undefined}
+        aria-controls="site-daily-quote"
         onClick={() => (open ? close() : show())}
       >
         <ThumbsUp size={22} />

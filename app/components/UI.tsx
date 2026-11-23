@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { ViewTransition, type CSSProperties, type ReactNode } from "react";
 import StatisticsCounters from "./StatisticsCounters";
 import {
   expertise,
@@ -10,6 +10,7 @@ import {
   socialLinks,
   ventures,
   type Article,
+  type IntroImage,
 } from "../data/content";
 
 export function Arrow({ className = "" }: { className?: string }) {
@@ -45,12 +46,19 @@ export function Button({
 export function TextLink({
   href,
   children,
+  transitionTypes,
 }: {
   href: string;
   children: ReactNode;
+  /** How the page change animates, such as ["nav-forward"]. See app/template.tsx. */
+  transitionTypes?: string[];
 }) {
   return (
-    <Link href={href} className="site-text-link">
+    <Link
+      href={href}
+      className="site-text-link"
+      transitionTypes={transitionTypes}
+    >
       {children}
       <Arrow />
     </Link>
@@ -68,38 +76,69 @@ export function Surface({
   dark = false,
   className = "",
   id,
+  backdrop,
 }: {
   children: ReactNode;
   dark?: boolean;
   className?: string;
   id?: string;
+  /** Decoration drawn behind the section's content, edge to edge. */
+  backdrop?: ReactNode;
 }) {
   return (
     <section
       id={id}
       className={`site-surface ${dark ? "site-dark" : "site-light"} ${className}`}
     >
+      {backdrop}
       <div className="site-wrap site-section">{children}</div>
     </section>
+  );
+}
+/** The faint picture behind an inner page's heading. Pass it to a dark
+    Surface as its `backdrop`. */
+export function IntroBackdrop({ image }: { image: IntroImage }) {
+  return (
+    <div
+      className="site-intro-backdrop"
+      aria-hidden="true"
+      style={
+        {
+          "--intro-opacity": image.opacity,
+          "--intro-position": image.position,
+          "--intro-start": image.start,
+        } as CSSProperties
+      }
+    >
+      {/* It sits at the top of the page, so it loads with the page. */}
+      <Image src={image.src} alt="" fill sizes="100vw" loading="eager" />
+    </div>
   );
 }
 export function PageIntro({
   title,
   accent,
   children,
+  image,
 }: {
   title: string;
   accent: string;
   children: ReactNode;
+  /** A faint picture behind the heading. See `introImages` in the content. */
+  image?: IntroImage;
 }) {
   return (
-    <Surface dark className="site-page-intro">
-      <h1 data-reveal>
+    <Surface
+      dark
+      className="site-page-intro"
+      backdrop={image && <IntroBackdrop image={image} />}
+    >
+      <h1>
         {title}
         <br />
         <span>{accent}</span>
       </h1>
-      <p className="site-lead" data-reveal>
+      <p className="site-lead">
         {children}
       </p>
     </Surface>
@@ -113,7 +152,7 @@ export function Invitation() {
           <span>LET’S TALK.</span>
           <Arrow />
         </Link>
-        <div className="site-invitation-bottom">
+        <div className="site-invitation-bottom" data-reveal>
           <div>
             <h3>Your next move starts here.</h3>
             <p>
@@ -216,7 +255,7 @@ export function Statistics() {
 /** Pass `eager` where the portrait sits at the top of the page, as on About. */
 export function Portrait({ eager = false }: { eager?: boolean }) {
   return (
-    <div className="site-portrait">
+    <div className="site-portrait" data-reveal="zoom">
       <Image
         src="/images/portrait.webp"
         width={762}
@@ -281,29 +320,58 @@ export function Ventures() {
     </Surface>
   );
 }
-export function ArticleCard({ article }: { article: Article }) {
+// Opening an article slides the new page in from the right.
+const OPEN_ARTICLE = ["nav-forward"];
+
+export function ArticleCard({
+  article,
+  morphTitle = true,
+}: {
+  article: Article;
+  /** Set to false where the card sits far down a page, as under an article. */
+  morphTitle?: boolean;
+}) {
+  const title = (
+    <h3>
+      <Link href={article.href} transitionTypes={OPEN_ARTICLE}>
+        {article.displayTitle}
+      </Link>
+    </h3>
+  );
   return (
     <article className="site-glass site-article-card" data-reveal>
       <p className="site-caption">
         {article.category} · {article.date}
       </p>
-      <h3>
-        <Link href={article.href}>{article.displayTitle}</Link>
-      </h3>
+      {/* The title shares a name with the heading on the article page, so it
+          grows into that heading when the article opens. */}
+      {morphTitle ? (
+        <ViewTransition
+          name={`article-title-${article.slug}`}
+          share="title-morph"
+          default="none"
+        >
+          {title}
+        </ViewTransition>
+      ) : (
+        title
+      )}
       <p>{article.shortExcerpt}</p>
-      <TextLink href={article.href}>Read article</TextLink>
+      <TextLink href={article.href} transitionTypes={OPEN_ARTICLE}>
+        Read article
+      </TextLink>
     </article>
   );
 }
 export function Institutions() {
   return (
     <div className="site-institutions">
-      <p className="site-caption">
+      <p className="site-caption" data-reveal>
         Speaking &amp; mentoring across institutions including
       </p>
       <div className="site-logos">
         {["IIMs", "ISB", "IIFT", "IITs", "CII", "FICCI"].map((name) => (
-          <div key={name} className="site-institution">
+          <div key={name} className="site-institution" data-reveal>
             {name === "IIMs" || name === "IITs" ? (
               <div className="site-group-mark">
                 <Image
@@ -338,16 +406,16 @@ export function Institutions() {
 export function VennStrip() {
   return (
     <section className="site-discipline">
-      <div className="site-wrap">
+      <div className="site-wrap" data-reveal="group">
         <p>
           <span>
-            STRATEGY <i aria-hidden="true">+</i>
+            <b>STRATEGY</b> <i aria-hidden="true">+</i>
           </span>
           <span>
-            LEARNING <i aria-hidden="true">+</i>
+            <b>LEARNING</b> <i aria-hidden="true">+</i>
           </span>
           <span>
-            COMMUNITY <i aria-hidden="true">=</i>
+            <b>COMMUNITY</b> <i aria-hidden="true">=</i>
           </span>
         </p>
         <div

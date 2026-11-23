@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { articles } from "../../data/content";
+import { ViewTransition } from "react";
+import { articles, introImages } from "../../data/content";
 import { pageMetadata, SITE_URL } from "../../data/site";
-import { ArticleCard, Surface } from "../../components/UI";
+import { ArticleCard, IntroBackdrop, Surface } from "../../components/UI";
 import ArticleSidebar from "../../components/ArticleSidebar";
+import PageTransition from "../../components/PageTransition";
 type Props = { params: Promise<{ slug: string }> };
 export function generateStaticParams() {
   return articles.map(({ slug }) => ({ slug }));
@@ -60,15 +62,32 @@ export default async function ArticlePage({ params }: Props) {
       );
   }
   return (
-    <>
-      <Surface dark className="site-reader-intro">
-        <Link className="site-back" href="/speaking-mind">
+    <PageTransition>
+      {/* The article's own cover appears below, so the heading area shares
+          the Writing page's picture. */}
+      <Surface
+        dark
+        className="site-reader-intro"
+        backdrop={<IntroBackdrop image={introImages.writing} />}
+      >
+        <Link
+          className="site-back"
+          href="/speaking-mind"
+          transitionTypes={["nav-back"]}
+        >
           ← All writing
         </Link>
         <p className="site-caption">
           {article.category} · {article.date}
         </p>
-        <h1>{article.displayTitle}</h1>
+        {/* Shares its name with the title on the article's card. */}
+        <ViewTransition
+          name={`article-title-${article.slug}`}
+          share="title-morph"
+          default="none"
+        >
+          <h1>{article.displayTitle}</h1>
+        </ViewTransition>
         <p>By Deepak Goel · From the archive</p>
       </Surface>
       <Surface className="site-reading-surface">
@@ -100,16 +119,16 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       </Surface>
       <Surface dark className="site-reader-related">
-        <h2>KEEP EXPLORING.</h2>
+        <h2 data-reveal>KEEP EXPLORING.</h2>
         <div className="site-grid-three">
           {articles
             .filter((item) => item.slug !== slug)
             .slice(0, 3)
             .map((item) => (
-              <ArticleCard key={item.slug} article={item} />
+              <ArticleCard key={item.slug} article={item} morphTitle={false} />
             ))}
         </div>
       </Surface>
-    </>
+    </PageTransition>
   );
 }

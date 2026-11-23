@@ -145,7 +145,7 @@ export default function ArticleSidebar({
               aria-label="Copy article link"
             >
               {copyStatus === "Link copied" ? (
-                <Check size={22} />
+                <Check size={22} className="site-pop" />
               ) : (
                 <Link2 size={22} />
               )}

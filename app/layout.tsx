@@ -66,6 +66,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${heading.variable} ${logo.variable}`}
+      // Lets Next.js jump straight to the top of a new page; in-page links
+      // still scroll smoothly.
+      data-scroll-behavior="smooth"
     >
       <body>
         <div className="site">

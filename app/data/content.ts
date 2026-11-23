@@ -157,6 +157,50 @@ export const eventPhotos: EventPhoto[] = [
   },
 ];
 
+/** The faint picture behind the heading at the top of an inner page. */
+export type IntroImage = {
+  src: string;
+  /** Which part of the picture to keep in view, as a CSS `object-position`. */
+  position?: string;
+  /** How strongly it shows, from 0 to 1. Bright photos need less than dark ones. */
+  opacity?: number;
+  /** How far across the heading area the picture begins. Default "30%". */
+  start?: string;
+};
+// About and Media use real photographs (Media's is a soft-edged crop of
+// /images/speaking.png). The others are generated still-life scenes. All are
+// recorded in sources.json.
+export const introImages = {
+  about: { src: "/images/workshop.png", position: "50% 8%", opacity: 0.34 },
+  expertise: {
+    src: "/images/intro/chess.webp",
+    position: "100% 60%",
+    opacity: 0.62,
+  },
+  writing: {
+    src: "/images/intro/library.webp",
+    position: "100% 40%",
+    opacity: 0.5,
+  },
+  media: {
+    src: "/images/intro/speaker.webp",
+    position: "100% 0%",
+    opacity: 0.42,
+    start: "56%",
+  },
+  quotes: {
+    src: "/images/intro/morning.webp",
+    position: "50% 44%",
+    opacity: 0.3,
+    start: "52%",
+  },
+  contact: {
+    src: "/images/intro/lounge.webp",
+    position: "100% 45%",
+    opacity: 0.6,
+  },
+} satisfies Record<string, IntroImage>;
+
 export const ventures = [
   {
     title: "Digitally Next",

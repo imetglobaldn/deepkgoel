@@ -92,7 +92,7 @@ export default function StatisticsCounters() {
   return (
     <dl ref={list}>
       {stats.map(([value, label]) => (
-        <div key={value}>
+        <div key={value} data-reveal>
           <dt>
             <span className="site-sr-only">{value}</span>
             <span data-count-value aria-hidden="true">

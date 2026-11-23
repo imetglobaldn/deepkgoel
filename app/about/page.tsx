@@ -7,8 +7,14 @@ import {
   Surface,
   Ventures,
 } from "../components/UI";
-import { CAREER, EDUCATION, socialLinks } from "../data/content";
+import {
+  CAREER,
+  EDUCATION,
+  introImages,
+  socialLinks,
+} from "../data/content";
 import { pageMetadata } from "../data/site";
+import PageTransition from "../components/PageTransition";
 
 const intro =
   "Entrepreneur. Strategist. Mentor. Connecting business ambition with the people who make it happen.";
@@ -21,8 +27,12 @@ export const metadata = pageMetadata({
 
 export default function AboutPage() {
   return (
-    <>
-      <PageIntro title="THE PERSON" accent="BEHIND THE IDEAS.">
+    <PageTransition>
+      <PageIntro
+        title="THE PERSON"
+        accent="BEHIND THE IDEAS."
+        image={introImages.about}
+      >
         {intro}
       </PageIntro>
       <Surface>
@@ -40,7 +50,7 @@ export default function AboutPage() {
             </p>
             <p>
               From India to the US, Canada and Europe, that experience has
-              shaped one belief: progress starts with a clear perspective—and
+              shaped one belief: progress starts with a clear perspective-and
               becomes real through people.
             </p>
             <p>
@@ -63,14 +73,16 @@ export default function AboutPage() {
         </div>
       </Surface>
       <Statistics />
-      <Surface>
+      <Surface className="site-gallery">
         <div className="site-section-head">
           <h2 data-reveal>
             OUT IN THE WORLD.
             <br />
             OPEN TO WHAT’S NEXT.
           </h2>
-          <p>Recent gatherings, shared ideas and moments from the archive.</p>
+          <p data-reveal>
+            Recent gatherings, shared ideas and moments from the archive.
+          </p>
         </div>
         <PhotoCarousel />
       </Surface>
@@ -82,7 +94,7 @@ export default function AboutPage() {
               <br />
               THAT CONNECTS.
             </h2>
-            <p className="site-section-description">
+            <p className="site-section-description" data-reveal>
               A journey across technology, business and people.
             </p>
           </div>
@@ -103,13 +115,16 @@ export default function AboutPage() {
       <Surface>
         <div className="site-editorial-grid">
           <div>
-            <h2>
+            <h2 data-reveal>
               ALWAYS
               <br />A STUDENT.
             </h2>
-            <p className="site-section-description">
+            <p className="site-section-description" data-reveal>
               The foundations. And a commitment to keep learning.
             </p>
+            <Button href="/expertise" dark>
+              Explore the work
+            </Button>
           </div>
           <div className="site-education">
             {EDUCATION.map((item) => (
@@ -119,13 +134,10 @@ export default function AboutPage() {
                 <p>{item.degree}</p>
               </article>
             ))}
-            <Button href="/expertise" dark>
-              Explore the work
-            </Button>
           </div>
         </div>
       </Surface>
       <Ventures />
-    </>
+    </PageTransition>
   );
 }

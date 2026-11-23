@@ -19,7 +19,8 @@ export default function EnquiryForm({
     const form = event.currentTarget;
     for (const name of ["name", "message"]) {
       const field = form.elements.namedItem(name) as
-        HTMLInputElement | HTMLTextAreaElement;
+        | HTMLInputElement
+        | HTMLTextAreaElement;
       field.setCustomValidity(
         field.value.trim() ? "" : "Please fill in this field.",
       );
@@ -43,7 +44,7 @@ export default function EnquiryForm({
     ]
       .filter((line, index) => line || index === 1 || index === 3)
       .join("\n");
-    const subject = `${value("type")} enquiry — ${value("name")}`;
+    const subject = `${value("type")} enquiry - ${value("name")}`;
     setDraft({
       channel,
       message,
@@ -67,6 +68,7 @@ export default function EnquiryForm({
   return (
     <form
       className="site-enquiry"
+      data-reveal
       onSubmit={prepare}
       onInput={(event) => {
         const target = event.target as HTMLInputElement;

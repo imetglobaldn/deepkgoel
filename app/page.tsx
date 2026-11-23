@@ -12,13 +12,14 @@ import {
   Ventures,
 } from "./components/UI";
 import { articles } from "./data/content";
+import PageTransition from "./components/PageTransition";
 
 // The title, description and sharing tags come from the root layout.
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (
-    <>
+    <PageTransition>
       <section className="site-hero">
         <div className="site-hero-stage">
           <Image
@@ -96,7 +97,7 @@ export default function HomePage() {
             <h3 className="site-subtitle">Entrepreneur. Strategist. Mentor.</h3>
             <p>
               I work at the intersection of business, digital branding and
-              education—helping ambitious people and organizations turn
+              education-helping ambitious people and organizations turn
               possibility into progress.
             </p>
             <p>
@@ -136,6 +137,7 @@ export default function HomePage() {
             height={733}
             sizes="(max-width: 760px) 100vw, 50vw"
             alt="Deepak Goel speaking at AIMA"
+            data-reveal="zoom"
           />
           <Image
             src="/images/workshop.png"
@@ -143,6 +145,7 @@ export default function HomePage() {
             height={733}
             sizes="(max-width: 760px) 100vw, 50vw"
             alt="Deepak in conversation with workshop participants"
+            data-reveal="zoom"
           />
         </div>
         <Institutions />
@@ -154,7 +157,7 @@ export default function HomePage() {
           <br />
           HUMAN IMPACT.
         </h2>
-        <p className="site-section-description">
+        <p className="site-section-description" data-reveal>
           Three connected ways to turn experience into progress for people,
           organizations and communities.
         </p>
@@ -172,6 +175,6 @@ export default function HomePage() {
           ))}
         </div>
       </Surface>
-    </>
+    </PageTransition>
   );
 }

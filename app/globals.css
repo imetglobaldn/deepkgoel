@@ -61,6 +61,85 @@ textarea {
   display: none !important;
 }
 
+/* Motion, modelled on iOS: one curve for moves and sheets, and springs that
+   overshoot a little and settle. A press is quick; the release springs back.
+   Defined on the root so page transitions can use them too. */
+:root {
+  /* The curve iOS uses for sheets and navigation. */
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Approximations for browsers that cannot draw a real spring. */
+  --spring: cubic-bezier(0.3, 1.25, 0.5, 1);
+  --spring-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    /* Sampled damped springs. Most of the travel happens in the first half
+       of the duration; the rest is the settle. */
+    --spring: linear(
+      0,
+      0.0009 0.5%,
+      0.0075 1.5%,
+      0.0258 2.8%,
+      0.0599 4.4%,
+      0.1119 6.4%,
+      0.1813 8.5%,
+      0.2654 10.9%,
+      0.3601 13.5%,
+      0.4602 16.3%,
+      0.5604 19.3%,
+      0.6557 22.4%,
+      0.7422 25.8%,
+      0.8171 29.3%,
+      0.8789 33%,
+      0.9273 36.8%,
+      0.963 40.8%,
+      0.9877 45%,
+      1.0031 49.3%,
+      1.0115 53.8%,
+      1.0148 58.4%,
+      1.0149 63.1%,
+      1.013 68%,
+      1.0103 73%,
+      1.0075 78.1%,
+      1.0051 83.4%,
+      1.0031 88.8%,
+      1.0017 94.3%,
+      1
+    );
+    --spring-bouncy: linear(
+      0,
+      0.0016 0.5%,
+      0.0142 1.5%,
+      0.0488 2.8%,
+      0.1128 4.4%,
+      0.2084 6.4%,
+      0.3322 8.5%,
+      0.4755 10.9%,
+      0.6263 13.5%,
+      0.771 16.3%,
+      0.8975 19.3%,
+      0.9965 22.4%,
+      1.0634 25.8%,
+      1.0986 29.3%,
+      1.1065 33%,
+      1.0947 36.8%,
+      1.0716 40.8%,
+      1.045 45%,
+      1.0211 49.3%,
+      1.0034 53.8%,
+      0.9929 58.4%,
+      0.9888 63.1%,
+      0.9893 68%,
+      0.9922 73%,
+      0.9957 78.1%,
+      0.9986 83.4%,
+      1.0004 88.8%,
+      1.0011 94.3%,
+      1
+    );
+  }
+}
+
 /* Approved glass, yellow and editorial typography theme. */
 .site {
   --site-header-height: 100px;
@@ -142,6 +221,15 @@ textarea {
   font-size: clamp(24px, 2vw, 30px);
   line-height: 1.12;
 }
+/* Pictures cannot be selected or dragged, so a stray drag never highlights
+   one or lifts a ghost copy of it. */
+.site img,
+.site svg {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
 .site .site-wrap {
   width: min(100%, 1600px);
   padding-inline: var(--gutter);
@@ -177,7 +265,6 @@ textarea {
 .site-source {
   font-size: 12px;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s;
 }
 .site-source:hover {
   border-color: currentColor;
@@ -204,7 +291,10 @@ textarea {
 .site-surface {
   position: relative;
   isolation: isolate;
+  /* Clips the soft glows. "clip" (unlike "hidden") still lets a column inside
+     the section stick while the page scrolls; older browsers use "hidden". */
   overflow: hidden;
+  overflow: clip;
 }
 .site-light {
   background: linear-gradient(133deg, #e7eced 3%, #f4f0df 45%, #e8edf1 88%);
@@ -288,7 +378,7 @@ textarea {
   font-weight: 600;
   line-height: 20px;
   border: 0;
-  transition: transform 0.25s var(--ease);
+  transition: transform 0.55s var(--spring);
   white-space: nowrap;
   width: fit-content;
 }
@@ -315,7 +405,7 @@ textarea {
   background: var(--button-backing);
   transform: translate(var(--button-shadow-x), var(--button-shadow-y))
     skewX(-16deg);
-  transition: transform 0.25s var(--ease);
+  transition: transform 0.55s var(--spring);
 }
 .site-button-dark {
   --button-face-start: #1c231e;
@@ -328,7 +418,7 @@ textarea {
 }
 .site-button .site-arrow,
 .site-text-link .site-arrow {
-  transition: transform 0.25s var(--ease);
+  transition: transform 0.5s var(--spring);
 }
 .site-button:hover {
   transform: translateY(-2px);
@@ -382,18 +472,24 @@ textarea {
   background: #111512;
   color: #fff;
   isolation: isolate;
-  transition: transform 0.28s var(--ease);
+  transition:
+    transform 0.5s var(--ease-ios),
+    background-color 0.4s;
 }
 .site-header--hero {
   margin-bottom: calc(-1 * var(--site-header-height));
   background: transparent;
 }
-.site-header::before {
+/* Two backdrop layers that cross-fade: ::before is the soft veil over the top
+   of the homepage hero, ::after the frosted bar shown once the page scrolls. */
+.site-header::before,
+.site-header::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  transition: opacity 0.4s;
 }
 .site-header--hero::before {
   background: linear-gradient(
@@ -410,15 +506,20 @@ textarea {
 .site-header.is-scrolled {
   background: transparent;
 }
-.site-header.is-scrolled::before {
+.site-header::after {
+  opacity: 0;
   background: linear-gradient(120deg, #070a10ed, #17253be6);
   -webkit-backdrop-filter: blur(20px) saturate(115%);
   backdrop-filter: blur(20px) saturate(115%);
-  -webkit-mask-image: none;
-  mask-image: none;
   box-shadow:
     0 1px 0 #ffffff14,
     0 8px 24px #0000001f;
+}
+.site-header.is-scrolled::before {
+  opacity: 0;
+}
+.site-header.is-scrolled::after {
+  opacity: 1;
 }
 .site-header.is-hidden:not(:has(:focus-visible)) {
   transform: translateY(calc(-100% - 12px));
@@ -460,7 +561,7 @@ textarea {
   background: var(--yellow);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.25s;
+  transition: transform 0.45s var(--ease-ios);
 }
 .site-header nav > a:hover:after,
 .site-header nav > a[aria-current]:after {
@@ -482,7 +583,7 @@ textarea {
 }
 .site-menu-symbol {
   display: inline-block;
-  transition: transform 0.2s var(--ease);
+  transition: transform 0.5s var(--spring);
 }
 .site-menu-toggle[aria-expanded="true"] .site-menu-symbol {
   transform: rotate(45deg);
@@ -746,8 +847,8 @@ textarea {
   align-items: flex-start;
   gap: 24px;
   transition:
-    transform 0.3s var(--ease),
-    box-shadow 0.3s;
+    transform 0.6s var(--spring),
+    box-shadow 0.4s;
 }
 .site-number {
   font-family: var(--font-heading), sans-serif;
@@ -845,9 +946,6 @@ textarea {
   grid-template-columns: 20px 1fr 1.65fr 24px;
   align-items: center;
   gap: 24px;
-  transition:
-    background 0.3s,
-    transform 0.3s;
 }
 .site-venture:hover {
   transform: translateX(4px);
@@ -866,7 +964,7 @@ textarea {
 }
 .site-venture .site-arrow {
   color: var(--yellow);
-  transition: transform 0.3s;
+  transition: transform 0.5s var(--spring);
 }
 .site-venture:hover .site-arrow {
   transform: translate(3px, -3px);
@@ -878,7 +976,7 @@ textarea {
   gap: 24px;
   min-height: 380px;
   transition:
-    transform 0.3s,
+    transform 0.6s var(--spring),
     border-color 0.3s;
 }
 .site-article-card:hover {
@@ -937,7 +1035,7 @@ textarea {
   width: 88px;
   height: 88px;
   stroke-width: 0.65;
-  transition: transform 0.4s var(--ease);
+  transition: transform 0.6s var(--spring);
 }
 .site-invitation:hover .site-talk > .site-arrow,
 .site-invitation:focus-within .site-talk > .site-arrow {
@@ -1049,11 +1147,6 @@ textarea {
   width: 28px;
   height: 28px;
 }
-.site-footer-social-icons > a {
-  transition:
-    color 0.2s,
-    transform 0.2s;
-}
 .site-footer-social-icons > a:hover {
   transform: translateY(-2px);
 }
@@ -1085,6 +1178,24 @@ textarea {
   margin-top: 32px !important;
   opacity: 0.85;
 }
+/* A faint picture behind the heading of every inner page. It sits on the
+   right, away from the words, and fades out toward them, so the heading stays
+   easy to read. Each page sets how strongly it shows (`--intro-opacity`),
+   which part of it to keep in view (`--intro-position`) and, for a tall
+   picture, how far across it begins (`--intro-start`). */
+.site-intro-backdrop {
+  position: absolute;
+  inset: 0 0 0 var(--intro-start, 30%);
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--intro-opacity, 0.4);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 58%);
+  mask-image: linear-gradient(90deg, transparent, #000 58%);
+}
+.site-intro-backdrop > img {
+  object-fit: cover;
+  object-position: var(--intro-position, center);
+}
 .site-section-head {
   display: flex;
   justify-content: space-between;
@@ -1100,6 +1211,18 @@ textarea {
   display: grid;
   grid-template-columns: 1fr 1.35fr;
   gap: 80px;
+}
+/* The heading column stays in view while the longer column beside it
+   scrolls. It sits just below the header, and moves up into the space the
+   header leaves when it hides. */
+.site-editorial-grid > :first-child {
+  position: sticky;
+  top: calc(var(--site-header-height) + 32px);
+  align-self: start;
+  transition: top 0.5s var(--ease-ios);
+}
+.site:has(.site-header.is-hidden) .site-editorial-grid > :first-child {
+  top: 48px;
 }
 .site-timeline article {
   display: flex;
@@ -1154,14 +1277,36 @@ textarea {
   aspect-ratio: 4/3;
   background: #17202b;
   overflow: hidden;
-  border-radius: 4px;
-  touch-action: pan-y;
+  border-radius: 20px;
+  box-shadow: 0 32px 56px -36px #1115128c;
 }
-.site-carousel-image > img {
+/* The photos sit side by side in a strip that scrolls sideways and snaps to
+   each one, so a swipe follows the finger and settles with the system's own
+   momentum. The small pictures and arrows show position, so the scrollbar is
+   hidden. */
+.site-carousel-track {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* A swipe past either end stays here instead of going back a page. */
+  overscroll-behavior-x: contain;
+}
+.site-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.site-carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+.site-carousel-slide > img {
   object-fit: cover;
-  animation: site-image-in 0.35s ease-out;
 }
-.site-carousel-image > img.site-contain {
+.site-carousel-slide > img.site-contain {
   object-fit: contain;
 }
 .site-carousel-counter {
@@ -1171,8 +1316,27 @@ textarea {
   color: #fff;
   font-size: 14px;
   background: #111512b3;
-  padding: 8px 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
   backdrop-filter: blur(12px);
+}
+/* The number and the caption re-enter each time the photo changes. */
+.site-carousel-counter > b {
+  display: inline-block;
+  font-weight: inherit;
+  animation: site-rise-in 0.45s var(--ease-ios) both;
+}
+.site-carousel-caption > * {
+  animation: site-rise-in 0.6s var(--ease-ios) both;
+}
+.site-carousel-caption > :nth-child(2) {
+  animation-delay: 0.05s;
+}
+.site-carousel-caption > :nth-child(3) {
+  animation-delay: 0.1s;
+}
+.site-carousel-caption > :nth-child(4) {
+  animation-delay: 0.15s;
 }
 .site-carousel-counter > span {
   opacity: 0.6;
@@ -1195,10 +1359,15 @@ textarea {
 .site-carousel-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   justify-content: space-between;
 }
-.site-carousel-controls > button {
+.site-carousel-arrows {
+  display: flex;
+  gap: 12px;
+  flex: none;
+}
+.site-carousel-arrows > button {
   background: transparent;
   border: 1px solid #11151250;
   border-radius: 50%;
@@ -1206,37 +1375,112 @@ textarea {
   height: 48px;
   display: grid;
   place-items: center;
-  transition:
-    background 0.2s,
-    transform 0.2s;
 }
-.site-carousel-controls > button:hover {
+.site-carousel-arrows > button:hover {
   background: var(--yellow);
   transform: translateY(-2px);
 }
-.site-carousel-dots {
+/* A small picture of every photo. The one on show is at full strength with a
+   ring round it; the others are dimmed until pointed at. */
+.site-carousel-thumbs {
   display: flex;
-  gap: 4px;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Room for the ring round the current picture. */
+  padding: 4px;
+  margin: -4px;
 }
-.site-carousel-dots > button {
-  height: 40px;
-  width: 24px;
-  background: transparent;
+.site-carousel-thumbs > button {
+  flex: 0 1 72px;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  padding: 0;
   border: 0;
-  display: grid;
-  place-items: center;
+  border-radius: 10px;
+  background: #17202b;
+  overflow: hidden;
+  opacity: 0.5;
+  transition:
+    opacity 0.4s var(--ease-ios),
+    box-shadow 0.4s var(--ease-ios),
+    scale 0.5s var(--spring);
 }
-.site-carousel-dots span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #11151244;
-  transition: width 0.2s;
+.site-carousel-thumbs > button > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.site-carousel-dots [aria-current] > span {
-  width: 18px;
-  background: var(--ink);
-  border-radius: 4px;
+.site-carousel-thumbs > button:hover {
+  opacity: 0.85;
+}
+.site-carousel-thumbs > [aria-current] {
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px #edefea,
+    0 0 0 4px var(--ink);
+}
+/* On a desktop screen the photo gallery fits one screen: the heading, the
+   photo, its caption and the controls are all in view together. The photo
+   takes whatever height the screen has left after the heading, so nothing is
+   cut off on a short laptop screen. `--gallery-lines` is the number of lines
+   in the heading above it. */
+@media (min-width: 1100px) and (min-height: 560px) {
+  .site-gallery {
+    --gallery-lines: 2;
+    --fit-pad: clamp(36px, 6.2vh, 64px);
+    --fit-gap: clamp(16px, 3vh, 32px);
+    --fit-title: clamp(34px, min(4.45vw, 7.4vh), 64px);
+    --gallery-photo-height: clamp(
+      260px,
+      calc(
+        100svh - 2 * var(--fit-pad) - var(--gallery-lines) * var(--fit-title) *
+          1.06 - 2 * var(--fit-gap) - 1px
+      ),
+      560px
+    );
+  }
+  .site-gallery-single {
+    --gallery-lines: 1;
+  }
+  .site-gallery > .site-section {
+    padding-block: var(--fit-pad);
+  }
+  .site-gallery .site-section-head {
+    margin-bottom: var(--fit-gap);
+  }
+  .site-gallery .site-section-head > h2 {
+    font-size: var(--fit-title);
+  }
+  .site-gallery .site-carousel {
+    display: flex;
+    gap: clamp(32px, 4.2vw, 64px);
+    padding-top: var(--fit-gap);
+  }
+  .site-gallery .site-carousel-image {
+    flex: none;
+    width: min(62%, calc(var(--gallery-photo-height) * 4 / 3));
+  }
+  .site-gallery .site-carousel-copy {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-block: 4px;
+    gap: 24px;
+  }
+  .site-gallery .site-carousel-caption {
+    max-width: 520px;
+  }
+  .site-gallery .site-carousel-copy h3 {
+    font-size: clamp(26px, min(2.8vw, 5.2vh), 40px);
+    margin: clamp(12px, 2.2vh, 20px) 0;
+  }
+  .site-gallery .site-carousel-copy p:not(.site-caption) {
+    margin-bottom: clamp(14px, 2.6vh, 24px);
+  }
+  /* There is room beside the photo for larger pictures in the strip. */
+  .site-gallery .site-carousel-thumbs > button {
+    flex-basis: 88px;
+  }
 }
 .site-capabilities {
   display: grid;
@@ -1299,10 +1543,16 @@ textarea {
 }
 .site-training summary > span {
   font-weight: 400;
-  transition: transform 0.2s;
+  transition: transform 0.5s var(--spring);
 }
-.site-training details[open] summary > span {
+/* The plus turns into a cross while the block is open, and turns back as
+   soon as it starts to close. */
+.site-training details[open]:not([data-closing]) summary > span {
   transform: rotate(45deg);
+}
+/* Clipped so the list is revealed as the block grows (see Disclosure.tsx). */
+.site-training-panel {
+  overflow: hidden;
 }
 .site-training details ul {
   padding-top: 16px;
@@ -1328,9 +1578,6 @@ textarea {
   padding: 10px 16px;
   border-radius: 50px;
   font-size: 13px;
-  transition:
-    background 0.2s,
-    color 0.2s;
 }
 .site-filter-list button[aria-pressed="true"],
 .site-filter-list button:hover {
@@ -1453,9 +1700,6 @@ textarea {
   border-radius: 8px;
   background: transparent;
   color: var(--ink);
-  transition:
-    background-color 0.2s,
-    transform 0.2s;
 }
 .site-reader-share-actions > :hover {
   background: var(--yellow);
@@ -1624,7 +1868,6 @@ textarea {
   color: var(--yellow);
   background: transparent;
   border: 0;
-  transition: background 0.3s;
 }
 .site-video-stage > button:hover {
   background: #ffffff10;
@@ -1651,7 +1894,7 @@ textarea {
   height: 260px;
   object-fit: cover;
   object-position: top;
-  transition: transform 0.4s;
+  transition: transform 0.8s var(--ease-ios);
 }
 .site-press-card:hover img {
   transform: scale(1.025);
@@ -1666,21 +1909,49 @@ textarea {
   gap: 24px;
 }
 .site-quote-card {
+  position: relative;
   padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.site-quote-card.is-today {
+/* A large pair of quotation marks sits in the top corner of every card,
+   behind the words, as on the earlier Daily Thumbs Up page. */
+.site-quote-card::before {
+  content: "”";
+  position: absolute;
+  top: -14px;
+  right: 26px;
+  z-index: -1;
+  font-family: var(--font-heading), Arial, sans-serif;
+  font-weight: 700;
+  font-size: 190px;
+  line-height: 1;
+  color: var(--yellow);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.site-quote-card[data-today]::before {
+  color: var(--ink);
+  opacity: 0.12;
+}
+/* The day label stays clear of the mark. */
+.site-quote-card > .site-caption {
+  max-width: calc(100% - 150px);
+}
+.site-quote-card[data-today] {
   background: var(--yellow);
   border-color: var(--yellow);
 }
-.site-quote-card-top {
+/* The source link and the copy button share the bottom of the card. */
+.site-quote-card-foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  margin-top: auto;
 }
-.site-quote-card-top > button {
+.site-quote-card-foot > button {
   display: grid;
   place-items: center;
   background: transparent;
@@ -1692,9 +1963,6 @@ textarea {
 .site-quote-card blockquote {
   font-size: 32px;
   line-height: 1.25;
-}
-.site-quote-card .site-source {
-  margin-top: auto;
 }
 .site-contact-grid {
   display: grid;
@@ -1823,6 +2091,22 @@ textarea {
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
+  transform-origin: bottom right;
+  transition:
+    opacity 0.3s ease-out,
+    scale 0.6s var(--spring-bouncy),
+    visibility 0s;
+}
+/* The widget waits out of sight while the top of the page is on screen, then
+   pops in. Its visibility flips only once it has faded out. */
+.site-daily-widget.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  scale: 0.5;
+  transition:
+    opacity 0.2s ease-in,
+    scale 0.25s ease-in,
+    visibility 0s linear 0.25s;
 }
 .site-daily-trigger {
   display: flex;
@@ -1836,7 +2120,6 @@ textarea {
   color: var(--ink);
   border: 1px solid #11151222;
   box-shadow: 0 4px 18px #0002;
-  transition: transform 0.25s;
 }
 .site-daily-trigger:hover {
   transform: translateY(-3px);
@@ -1865,10 +2148,46 @@ textarea {
     inset 0 1px 0 #ffffff1f;
   -webkit-backdrop-filter: blur(24px) saturate(120%);
   backdrop-filter: blur(24px) saturate(120%);
-  transform-origin: bottom right;
-  animation: site-widget-in 0.34s var(--ease);
-  position: relative;
+  /* Sits above the button without taking up room when closed. */
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
   overflow: hidden;
+  /* Closed: tucked towards the button, faded and out of reach. It springs
+     open from that corner and closes with a quicker fade. */
+  transform-origin: bottom right;
+  visibility: hidden;
+  opacity: 0;
+  scale: 0.86;
+  translate: 0 12px;
+  transition:
+    opacity 0.18s ease-in,
+    scale 0.24s ease-in,
+    translate 0.24s ease-in,
+    visibility 0s linear 0.24s;
+}
+.site-daily-widget.is-open .site-daily-panel {
+  visibility: visible;
+  opacity: 1;
+  scale: 1;
+  translate: none;
+  transition:
+    opacity 0.22s ease-out,
+    scale 0.65s var(--spring-bouncy),
+    translate 0.65s var(--spring),
+    visibility 0s;
+}
+/* The words follow the panel in. */
+.site-daily-widget.is-open .site-daily-panel blockquote,
+.site-daily-widget.is-open .site-daily-author,
+.site-daily-widget.is-open .site-daily-links {
+  animation: site-rise-in 0.6s var(--ease-ios) 0.06s both;
+}
+.site-daily-widget.is-open .site-daily-author {
+  animation-delay: 0.12s;
+}
+.site-daily-widget.is-open .site-daily-links {
+  animation-delay: 0.18s;
 }
 .site-daily-heading {
   display: flex;
@@ -1913,9 +2232,6 @@ textarea {
   border-radius: 50%;
   background: transparent;
   color: #ffffffcc;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
 }
 .site-daily-heading > button:hover {
   background: #ffffff1a;
@@ -1965,8 +2281,11 @@ textarea {
   height: 100%;
   background: var(--yellow);
   transform-origin: left;
-  animation: site-countdown 6s linear forwards;
   transition: opacity 0.25s;
+}
+/* The countdown starts afresh each time the panel opens. */
+.site-daily-widget.is-open .site-quote-timer > span {
+  animation: site-countdown 6s linear forwards;
 }
 .site-daily-panel.is-pinned .site-quote-timer > span {
   opacity: 0;
@@ -2005,10 +2324,6 @@ textarea {
   color: #d5dae2;
   font-size: 12px;
   font-weight: 500;
-  transition:
-    background-color 0.2s,
-    border-color 0.2s,
-    color 0.2s;
 }
 .site-daily-links > button:hover {
   border-color: #ffffff66;
@@ -2019,38 +2334,487 @@ textarea {
   background: #f4d62b1f;
   color: var(--yellow);
 }
+/* --- Motion ------------------------------------------------------------- */
+
+/* Scroll reveal. The script in Chrome.tsx adds these classes as blocks come
+   into view, then removes them; without the script everything is simply
+   visible. `translate` and `scale` are used instead of `transform` so each
+   element's own hover or press transform is left alone. */
 .site-reveal-ready {
   opacity: 0;
-  transform: translateY(14px);
+  translate: 0 22px;
   transition:
-    opacity 0.65s var(--ease),
-    transform 0.65s var(--ease);
+    opacity 0.7s var(--ease-ios) var(--reveal-delay, 0s),
+    translate 0.9s var(--ease-ios) var(--reveal-delay, 0s),
+    scale 0.9s var(--ease-ios) var(--reveal-delay, 0s);
+}
+.site-reveal-ready[data-reveal="zoom"] {
+  translate: none;
+  scale: 0.94;
 }
 .site-reveal-ready.is-visible {
   opacity: 1;
-  transform: none;
+  translate: none;
+  scale: none;
 }
+@media print {
+  .site-reveal-ready {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+  .site-intro-backdrop {
+    display: none;
+  }
+}
+/* A group is not hidden itself: its children animate when it comes into view. */
+.site-reveal-ready[data-reveal="group"] {
+  opacity: 1;
+  translate: none;
+}
+
+/* The yellow strip assembles itself: the words arrive in order, the circles
+   close in, then the dark centre lands and names the result. */
+.site-discipline .site-reveal-ready:not(.is-visible) p > span > *,
+.site-discipline .site-reveal-ready:not(.is-visible) .site-circle,
+.site-discipline .site-reveal-ready:not(.is-visible) .site-venn-center,
+.site-discipline .site-reveal-ready:not(.is-visible) .site-venn > b {
+  opacity: 0;
+}
+.site-discipline .is-visible p > span > * {
+  animation: site-rise-in 0.7s var(--ease-ios) both;
+}
+.site-discipline .is-visible p > span:nth-child(1) > i {
+  animation-delay: 0.08s;
+}
+.site-discipline .is-visible p > span:nth-child(2) > b {
+  animation-delay: 0.16s;
+}
+.site-discipline .is-visible p > span:nth-child(2) > i {
+  animation-delay: 0.24s;
+}
+.site-discipline .is-visible p > span:nth-child(3) > b {
+  animation-delay: 0.32s;
+}
+.site-discipline .is-visible p > span:nth-child(3) > i {
+  animation-delay: 0.4s;
+}
+.site-discipline .is-visible .site-circle {
+  animation: site-venn-circle-in 1.1s var(--spring) 0.5s both;
+}
+.site-discipline .is-visible .site-circle-strategy {
+  --from: -34px -14px;
+}
+.site-discipline .is-visible .site-circle-learning {
+  --from: 34px -14px;
+}
+.site-discipline .is-visible .site-circle-community {
+  --from: 0 38px;
+}
+@keyframes site-venn-circle-in {
+  from {
+    opacity: 0;
+    translate: var(--from);
+  }
+}
+.site-discipline .is-visible .site-venn-center {
+  animation: site-pop-in 0.8s var(--spring-bouncy) 1s both;
+}
+.site-discipline .is-visible .site-venn > b {
+  animation: site-fade-in 0.5s ease-out 1.3s both;
+}
+
+/* Entrances. Each keyframe set gives only the starting state, so the element
+   animates to whatever its own styles say. */
+@keyframes site-rise-in {
+  from {
+    opacity: 0;
+    translate: 0 26px;
+  }
+}
+@keyframes site-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-pop-in {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+}
+
+/* First appearance of the homepage hero: the photo settles, then the figure
+   and the words arrive in sequence. */
+.site-hero-background {
+  animation: site-hero-photo-in 1.5s var(--ease-ios) 0.12s both;
+}
+.site-hero-shadow,
+.site-hero-shadow-mobile {
+  animation: site-fade-in 1.2s ease-out 0.1s both;
+}
+/* The figure fades in quickly and drifts into place more slowly, so the
+   photo behind it never shows through. */
+.site-hero-portrait {
+  animation:
+    site-fade-in 0.5s ease-out both,
+    site-hero-figure-in 1.2s var(--ease-ios) both;
+}
+.site-hero h1,
+.site-hero-statement > * {
+  animation: site-rise-in 0.9s var(--ease-ios) both;
+}
+.site-hero h1 {
+  animation-delay: 0.12s;
+}
+.site-hero-statement > p {
+  animation-delay: 0.22s;
+}
+.site-hero-statement > .site-button {
+  animation-delay: 0.32s;
+}
+.site-hero-statement > small {
+  animation-delay: 0.42s;
+}
+@keyframes site-hero-photo-in {
+  from {
+    opacity: 0;
+    scale: 1.08;
+  }
+}
+@keyframes site-hero-figure-in {
+  from {
+    translate: 2.5% 3%;
+  }
+}
+
+/* First appearance of the heading on every other page. The article title has
+   no entrance of its own: it grows out of the card that was tapped. */
+.site-page-intro h1 {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.06s both;
+}
+.site-page-intro .site-lead {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.18s both;
+}
+/* The picture behind the heading fades in and settles back, as the photo on
+   the homepage does. */
+.site-intro-backdrop {
+  animation: site-intro-backdrop-in 1.6s var(--ease-ios) both;
+}
+@keyframes site-intro-backdrop-in {
+  from {
+    opacity: 0;
+    scale: 1.06;
+  }
+}
+.site-reader-intro .site-back,
+.site-reader-intro .site-caption,
+.site-reader-intro .site-section > p:last-child {
+  animation: site-rise-in 0.8s var(--ease-ios) both;
+}
+.site-reader-intro .site-caption {
+  animation-delay: 0.08s;
+}
+.site-reader-intro .site-section > p:last-child {
+  animation-delay: 0.2s;
+}
+
+/* Touch feedback: tappable controls shrink slightly under the finger and
+   spring back on release. `scale` keeps their hover `transform` intact. */
+.site-venture,
+.site-press-card,
+.site-filter-list button,
+.site-carousel-arrows > button,
+.site-quote-card-foot > button,
+.site-reader-share-actions > a,
+.site-reader-share-actions > button,
+.site-footer-social-icons > a,
+.site-daily-trigger,
+.site-daily-heading > button,
+.site-daily-links > button,
+.site .site-menu-toggle,
+.site-video-stage > button,
+.site-training summary {
+  transition:
+    transform 0.5s var(--spring),
+    scale 0.5s var(--spring),
+    background-color 0.25s,
+    border-color 0.25s,
+    color 0.25s,
+    box-shadow 0.3s;
+}
+.site-venture:active,
+.site-press-card:active,
+.site-filter-list button:active,
+.site-carousel-arrows > button:active,
+.site-carousel-thumbs > button:active,
+.site-quote-card-foot > button:active,
+.site-reader-share-actions > a:active,
+.site-reader-share-actions > button:active,
+.site-footer-social-icons > a:active,
+.site-daily-trigger:active,
+.site-daily-heading > button:active,
+.site-daily-links > button:active,
+.site .site-menu-toggle:active,
+.site-video-stage > button:active,
+.site-training summary:active {
+  scale: 0.94;
+  transition-duration: 0.09s;
+  transition-timing-function: ease-out;
+}
+/* Large surfaces move less than small controls. */
+.site-venture:active,
+.site-press-card:active,
+.site-training summary:active,
+.site-video-stage > button:active {
+  scale: 0.985;
+}
+/* Text links dim under the finger, as iOS text buttons do. */
+.site-header nav > a,
+.site-footer-navigation > a,
+.site-text-link,
+.site-source,
+.site-back,
+.site-social-links > a,
+.site-contact-info > a,
+.site-daily-links > a,
+.site-logo {
+  transition:
+    opacity 0.35s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.site-header nav > a:active,
+.site-footer-navigation > a:active,
+.site-text-link:active,
+.site-source:active,
+.site-back:active,
+.site-social-links > a:active,
+.site-contact-info > a:active,
+.site-daily-links > a:active,
+.site-logo:active {
+  opacity: 0.55;
+  transition-duration: 0.06s;
+}
+/* The main button: a quick press into its shadow, a springy release. */
+.site-button:active,
+.site-button:active::after {
+  transition-duration: 0.09s;
+  transition-timing-function: ease-out;
+}
+
+/* Small confirmations and arrivals. */
+/* The tick that replaces a copy icon pops in. */
+.site-pop {
+  animation: site-pop-in 0.55s var(--spring-bouncy) both;
+}
+/* "Link copied" and similar notes fade in when they have something to say. */
+.site-reader-copy-status:not(:empty),
+.site-draft [role="status"]:not(:empty) {
+  animation: site-rise-in 0.4s var(--ease-ios) both;
+}
+/* The prepared email or WhatsApp draft slides into place. */
+.site-draft {
+  animation: site-rise-in 0.55s var(--ease-ios) both;
+}
+/* The video fades in over its poster. */
+.site-video-stage iframe {
+  animation: site-fade-in 0.6s ease-out both;
+}
+/* Form fields change colour gently when selected. */
+.site-enquiry input,
+.site-enquiry select,
+.site-enquiry textarea {
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    box-shadow 0.3s;
+}
+.site-enquiry input:focus,
+.site-enquiry select:focus,
+.site-enquiry textarea:focus {
+  box-shadow: 0 0 0 4px #11151212;
+}
+/* Today’s quote card warms to yellow once the day is known. */
+.site-quote-card {
+  transition:
+    background-color 0.6s,
+    border-color 0.6s;
+}
+
+/* The homepage hero has a little depth, as iOS wallpapers do: while it
+   scrolls away the photo and figure drift more slowly than the page and the
+   words lift and fade. Only where the browser can tie an animation to
+   scrolling, and never when reduced motion is requested. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site-hero-stage {
+      animation: site-hero-depth linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+    .site-hero-content {
+      animation: site-hero-lift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 12vh 100vh;
+    }
+  }
+}
+@keyframes site-hero-depth {
+  to {
+    translate: 0 14%;
+  }
+}
+@keyframes site-hero-lift {
+  to {
+    opacity: 0.15;
+    translate: 0 -7%;
+  }
+}
+
+/* --- Page transitions ---------------------------------------------------
+   Moving between pages (see app/template.tsx). The page being left fades out
+   quickly and the new one fades in. Opening an article slides forward and
+   "All writing" slides back, the way iOS pushes and pops a screen, and the
+   article's title grows out of the card that was tapped. Browsers without
+   view transitions simply switch pages. */
+::view-transition {
+  /* Keep the page clickable while it animates. */
+  pointer-events: none;
+}
+::view-transition-old(.page-out) {
+  animation: 0.18s ease-in both site-page-fade-out;
+}
+::view-transition-new(.page-in) {
+  animation: 0.38s ease-out 0.1s both site-page-fade-in;
+}
+::view-transition-old(.nav-forward) {
+  --slide: -56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+::view-transition-new(.nav-forward) {
+  --slide: 72px;
+  animation:
+    0.32s ease-out 0.1s both site-page-fade-in,
+    0.6s var(--ease-ios) both site-page-slide-in;
+}
+::view-transition-old(.nav-back) {
+  --slide: 56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+::view-transition-new(.nav-back) {
+  --slide: -72px;
+  animation:
+    0.32s ease-out 0.1s both site-page-fade-in,
+    0.6s var(--ease-ios) both site-page-slide-in;
+}
+@keyframes site-page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes site-page-slide-in {
+  from {
+    translate: var(--slide) 0;
+  }
+}
+@keyframes site-page-slide-out {
+  to {
+    translate: var(--slide) 0;
+  }
+}
+/* Filtering the article list: cards that stay glide to their new places,
+   the others fade and shrink away or grow in. */
+::view-transition-group(.card-move) {
+  animation-duration: 0.55s;
+  animation-timing-function: var(--spring);
+}
+::view-transition-new(.card-in) {
+  animation: 0.45s var(--ease-ios) 0.1s both site-card-in;
+}
+::view-transition-old(.card-out) {
+  animation: 0.2s ease-in both site-card-out;
+}
+@keyframes site-card-in {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+@keyframes site-card-out {
+  to {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+/* The header and the thumbs-up button stay put while the page changes. */
+.site-header {
+  view-transition-name: site-header;
+}
+.site-daily-widget {
+  view-transition-name: site-daily;
+}
+::view-transition-group(site-header),
+::view-transition-group(site-daily) {
+  z-index: 100;
+}
+/* An article's title travelling between its card and its page. A touch of
+   blur mid-flight hides the two type sizes blending. */
+::view-transition-group(.title-morph) {
+  animation-duration: 0.6s;
+  animation-timing-function: var(--ease-ios);
+  z-index: 50;
+}
+::view-transition-image-pair(.title-morph) {
+  animation: 0.6s ease-in-out both site-title-blur;
+}
+@keyframes site-title-blur {
+  35% {
+    filter: blur(3px);
+  }
+}
+/* If the matching title is not on screen on the other page there is nowhere
+   to travel to, so the title simply leaves or arrives with its page. */
+::view-transition-old(.title-morph):only-child {
+  animation: 0.18s ease-in both site-page-fade-out;
+}
+::view-transition-new(.title-morph):only-child {
+  animation: 0.38s ease-out 0.1s both site-page-fade-in;
+}
+:root:active-view-transition-type(nav-forward)::view-transition-old(.title-morph):only-child {
+  --slide: -56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+:root:active-view-transition-type(nav-back)::view-transition-old(.title-morph):only-child {
+  --slide: 56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 @keyframes site-countdown {
   to {
     transform: scaleX(0);
-  }
-}
-@keyframes site-widget-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes site-image-in {
-  from {
-    opacity: 0.55;
-  }
-  to {
-    opacity: 1;
   }
 }
 @media (min-width: 1600px) {
@@ -2158,8 +2922,11 @@ textarea {
   .site .site-menu-toggle {
     display: flex;
   }
+  /* The menu drops in like an iOS sheet. Closed, it is lifted, faded and
+     hidden from the keyboard; `visibility` flips only after it has faded. */
   .site-header nav {
-    display: none;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     left: 0;
     right: 0;
@@ -2170,6 +2937,13 @@ textarea {
     align-items: stretch;
     gap: 8px;
     border-top: 1px solid #ffffff22;
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 -16px;
+    transition:
+      opacity 0.22s ease-out,
+      translate 0.4s var(--ease-ios),
+      visibility 0s linear 0.4s;
   }
   .site-header--hero nav {
     background: #0b121ef2;
@@ -2177,8 +2951,48 @@ textarea {
     backdrop-filter: blur(16px);
   }
   .site-header nav.is-open {
-    display: flex;
-    flex-direction: column;
+    visibility: visible;
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity 0.3s ease-out,
+      translate 0.6s var(--spring),
+      visibility 0s;
+  }
+  /* The links follow one after another. */
+  .site-header nav:not(.is-open) > * {
+    opacity: 0;
+    translate: 0 -10px;
+    transition:
+      opacity 0.15s,
+      translate 0.2s;
+  }
+  .site-header nav.is-open > * {
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity 0.4s ease-out calc(var(--i, 0) * 45ms + 70ms),
+      translate 0.7s var(--spring) calc(var(--i, 0) * 45ms + 70ms);
+  }
+  .site-header nav.is-open > a:active {
+    opacity: 0.55;
+    transition-duration: 0.06s;
+    transition-delay: 0s;
+  }
+  .site-header nav > :nth-child(2) {
+    --i: 1;
+  }
+  .site-header nav > :nth-child(3) {
+    --i: 2;
+  }
+  .site-header nav > :nth-child(4) {
+    --i: 3;
+  }
+  .site-header nav > :nth-child(5) {
+    --i: 4;
+  }
+  .site-header nav > :nth-child(6) {
+    --i: 5;
   }
   .site-header nav > a {
     padding: 12px;
@@ -2474,10 +3288,22 @@ textarea {
     font-size: 18px;
     margin-top: 24px !important;
   }
+  /* On a phone the words cover the whole heading area, so the picture fills
+     it more faintly and fades from the top corner down. */
+  .site-intro-backdrop {
+    inset: 0;
+    opacity: calc(var(--intro-opacity, 0.4) * 0.72);
+    -webkit-mask-image: linear-gradient(165deg, transparent 8%, #000 88%);
+    mask-image: linear-gradient(165deg, transparent 8%, #000 88%);
+  }
   .site-editorial-grid,
   .site-contact-grid {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+  /* With one column there is nothing beside the heading to scroll past. */
+  .site-editorial-grid > :first-child {
+    position: static;
   }
   .site-section-head {
     flex-direction: column;
@@ -2503,6 +3329,17 @@ textarea {
   }
   .site-carousel-copy p:not(.site-caption) {
     margin-bottom: 16px;
+  }
+  /* Square pictures in the strip are easier to tap on a phone. */
+  .site-carousel-controls {
+    gap: 16px;
+  }
+  .site-carousel-thumbs {
+    gap: 6px;
+  }
+  .site-carousel-thumbs > button {
+    aspect-ratio: 1;
+    border-radius: 8px;
   }
   .site-timeline article {
     gap: 16px;
@@ -2581,6 +3418,15 @@ textarea {
   }
   .site-quote-card {
     padding: 24px;
+  }
+  /* A smaller mark, so it stays above the first line of the quote. */
+  .site-quote-card::before {
+    top: -10px;
+    right: 18px;
+    font-size: 150px;
+  }
+  .site-quote-card > .site-caption {
+    max-width: calc(100% - 110px);
   }
   .site-quote-card blockquote {
     font-size: 28px;
@@ -2664,12 +3510,15 @@ textarea {
   .site *:before,
   .site *:after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
   .site .site-reveal-ready {
     opacity: 1;
-    transform: none;
+    translate: none;
+    scale: none;
   }
   .site-quote-timer > span {
     display: none;

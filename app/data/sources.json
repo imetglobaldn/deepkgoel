@@ -49,7 +49,8 @@
     "homeDesktop": "140:679",
     "homeMobile": "140:938",
     "portrait": "User-approved generated hero cutout from Figma; event photographs are authentic source images.",
-    "groupMarks": "IIMs and IITs use the user-approved custom group symbols, not campus logos."
+    "groupMarks": "IIMs and IITs use the user-approved custom group symbols, not campus logos.",
+    "introBackdrops": "Faint pictures behind the heading of each inner page (public/images/intro). About uses the authentic workshop photograph. Media uses a soft-edged crop of the authentic AIMA talk photograph (speaker.webp): the lectern sign and wall lettering are faded out and nothing is added. Expertise (chess.webp), Writing and the article pages (library.webp), Daily Thumbs Up (morning.webp, mirrored) and Contact plus the not-found page (lounge.webp) are generated decorative scenes, not photographs of real places or events."
   },
   "behavior": {
     "rotation": "Monday to Sunday in visitor local time, seven quotes repeated weekly",

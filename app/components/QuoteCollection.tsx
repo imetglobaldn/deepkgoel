@@ -13,7 +13,7 @@ export default function QuoteCollection() {
   }, []);
   async function copy(id: string, quote: string) {
     try {
-      await navigator.clipboard.writeText(`“${quote}” — Deepak Goel`);
+      await navigator.clipboard.writeText(`“${quote}” - Deepak Goel`);
       setCopied(id);
       setMessage("Quote copied.");
     } catch {
@@ -22,38 +22,44 @@ export default function QuoteCollection() {
   }
   return (
     <>
-      <p className="site-section-description">
-        One thought for each day. The same seven return every week—a small
+      <p className="site-section-description" data-reveal>
+        One thought for each day. The same seven return every week-a small
         reminder to carry with you.
       </p>
       <div className="site-quotes-grid">
         {weeklyQuotes.map((quote, i) => (
           <article
-            className={`site-glass site-quote-card ${day === i ? "is-today" : ""}`}
+            className="site-glass site-quote-card"
+            data-today={day === i ? "" : undefined}
+            data-reveal
             key={quote.id}
           >
-            <div className="site-quote-card-top">
-              <span className="site-caption">
-                {weekdays[i]}
-                {day === i ? " · TODAY" : ""}
-              </span>
+            <span className="site-caption">
+              {weekdays[i]}
+              {day === i ? " · TODAY" : ""}
+            </span>
+            <blockquote>“{quote.quote}”</blockquote>
+            <p>- Deepak Goel</p>
+            <div className="site-quote-card-foot">
+              <a
+                href={quote.sourceUrl}
+                className="site-source"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {quote.source} ↗
+              </a>
               <button
                 onClick={() => copy(quote.id, quote.quote)}
                 aria-label={`Copy ${weekdays[i]} quote`}
               >
-                {copied === quote.id ? <Check size={18} /> : <Copy size={18} />}
+                {copied === quote.id ? (
+                  <Check size={18} className="site-pop" />
+                ) : (
+                  <Copy size={18} />
+                )}
               </button>
             </div>
-            <blockquote>“{quote.quote}”</blockquote>
-            <p>— Deepak Goel</p>
-            <a
-              href={quote.sourceUrl}
-              className="site-source"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {quote.source} ↗
-            </a>
           </article>
         ))}
       </div>

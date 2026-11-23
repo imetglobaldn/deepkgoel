@@ -2,8 +2,9 @@ import Image from "next/image";
 import PhotoCarousel from "../components/PhotoCarousel";
 import VideoCard from "../components/VideoCard";
 import { PageIntro, Surface } from "../components/UI";
-import { MEDIA, VIDEOS, videoSources } from "../data/content";
+import { MEDIA, VIDEOS, introImages, videoSources } from "../data/content";
 import { pageMetadata } from "../data/site";
+import PageTransition from "../components/PageTransition";
 
 const intro =
   "On stage, in the room and out in the world. Perspectives on business, digital change and the way we learn.";
@@ -16,14 +17,18 @@ export const metadata = pageMetadata({
 
 export default function MediaPage() {
   return (
-    <>
-      <PageIntro title="GOOD QUESTIONS." accent="BETTER CONVERSATIONS.">
+    <PageTransition>
+      <PageIntro
+        title="GOOD QUESTIONS."
+        accent="BETTER CONVERSATIONS."
+        image={introImages.media}
+      >
         {intro}
       </PageIntro>
-      <Surface>
+      <Surface className="site-gallery site-gallery-single">
         <div className="site-section-head">
-          <h2>RECENT CONVERSATIONS.</h2>
-          <p>
+          <h2 data-reveal>RECENT CONVERSATIONS.</h2>
+          <p data-reveal>
             Verified event photographs and updates, alongside moments from the
             archive.
           </p>
@@ -45,7 +50,7 @@ export default function MediaPage() {
       </Surface>
       <Surface>
         <h2 data-reveal>IN THE PRESS.</h2>
-        <p className="site-section-description">
+        <p className="site-section-description" data-reveal>
           Coverage and clippings from the official archive.
         </p>
         <div className="site-press-grid">
@@ -76,6 +81,6 @@ export default function MediaPage() {
           ))}
         </div>
       </Surface>
-    </>
+    </PageTransition>
   );
 }
