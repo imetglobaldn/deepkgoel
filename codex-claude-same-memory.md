@@ -137,6 +137,11 @@ Last updated: 23 November 2026.
 - **Copy**: "Always a student" is now "Always a learner"; the footer role line ("Writer · Strategist · Media Professional") was removed.
 - Sources for every new photo are in `app/data/sources.json` (`msmeChampionsOfChange2026`, `homepageAndExpertisePhotos`). Figma has not been updated for steps 14 and 15.
 
+### 16. Hero on phones and tablets, responsiveness audit (24 November 2026, Claude Code)
+- **Phone hero**: the figure was faded to 68% opacity; now full strength. A dark fade covers only the lower hero behind the words, and the paragraph and founder line have a soft text shadow.
+- **Tall tablet hero** (761-1100px wide, portrait-ish, e.g. 768x904, 820x1180, 1024x904): the real Deepak in the blurred stage photo used to show beside the cut-out. Here the figure now fills the upper hero, the background photo is widened and anchored left so that person falls off-screen, and the words sit at the bottom over a fade. Landscape laptops and desktops are unchanged.
+- **Audit**: 9 pages at 14 widths (320 to 1920), checked for sideways scrolling, elements past the screen edge, clipped text and small tap targets, plus side-by-side screenshots. Fixed: Media heading ran past the edge at 320px (smaller minimum heading size); Contact form now stacks under the contact details below 1000px; Expertise industry tiles use two columns on tablets; small text links get a 40px-tall hit area on touch screens. Final run: 0 findings.
+
 ## Figma
 
 File `IGnduQLB6VMXw4kzcj2oPz`, page "V9 - Brand Architect" (`92:271`). The inner-page frames are older than the code in places (copy, eyebrow labels, dark quote cards). Synced on 23 November: hero background pictures, gallery and carousel components, About two-column sections with the moved button, Expertise accordion, quote-card corner marks, and a behaviour note at about x 29500. Not synced: the homepage changes from step 1, and the portrait and Contact background from step 5. Upload JPEG or PNG to Figma; WebP uploads render blank.
