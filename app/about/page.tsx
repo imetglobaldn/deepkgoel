@@ -27,7 +27,7 @@ export default function AboutPage() {
       </PageIntro>
       <Surface>
         <div className="site-about-grid">
-          <Portrait />
+          <Portrait eager />
           <div className="site-stack" data-reveal>
             <h2>
               Curious by nature.

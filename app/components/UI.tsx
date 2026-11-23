@@ -213,7 +213,8 @@ export function Statistics() {
     </Surface>
   );
 }
-export function Portrait() {
+/** Pass `eager` where the portrait sits at the top of the page, as on About. */
+export function Portrait({ eager = false }: { eager?: boolean }) {
   return (
     <div className="site-portrait">
       <Image
@@ -222,6 +223,7 @@ export function Portrait() {
         height={762}
         sizes="(max-width: 760px) 500px, 36vw"
         alt="Deepak Goel seated in his office"
+        loading={eager ? "eager" : undefined}
       />
     </div>
   );
